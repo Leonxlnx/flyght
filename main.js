@@ -181,16 +181,27 @@ function initTakeoff() {
             // Hide plane after sweep
             .set(flyingPlane, { opacity: 0 })
 
-            // ── Phase 4: TOP GUN: MAVERICK fades in — and stays ──
-            .fromTo(takeoffCard, {
-                opacity: 0,
-                y: 25,
-            }, {
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-                ease: 'power3.out',
-            }, '-=0.1');
+            // ── Phase 4: Cinematic film card reveal ──
+            .set(takeoffCard, { opacity: 1 })
+
+            .fromTo('.to-header', { opacity: 0, y: 15 }, {
+                opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+            })
+            .fromTo('.to-title-block', { opacity: 0, y: 30 }, {
+                opacity: 1, y: 0, duration: 1, ease: 'power4.out',
+            }, '-=0.3')
+            .fromTo('.to-meta', { opacity: 0, y: 10 }, {
+                opacity: 1, y: 0, duration: 0.5, ease: 'power3.out',
+            }, '-=0.5')
+            .fromTo('.to-quote', { opacity: 0 }, {
+                opacity: 0.8, duration: 0.8, ease: 'power2.out',
+            }, '-=0.2')
+            .fromTo('.to-facts', { opacity: 0, y: 15 }, {
+                opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+            }, '-=0.3')
+            .fromTo('.to-bg-img', { opacity: 0, scale: 1.15 }, {
+                opacity: 0.12, scale: 1.05, duration: 2, ease: 'power2.out',
+            }, '-=1.5');
     });
 }
 
