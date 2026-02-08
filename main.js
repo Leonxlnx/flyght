@@ -208,33 +208,11 @@ tl.set(introLine, { opacity: 1 }, '+=0.5')
         ease: 'power4.inOut',
     })
 
-    .to(introLine, {
-        height: '3px',
-        boxShadow: '0 0 30px 6px rgba(214,212,204,0.4), 0 0 80px 15px rgba(214,212,204,0.1)',
-        duration: 0.35,
-        ease: 'power2.out',
-    })
-
+    // Directly split — no brightening
     .set(introLine, { opacity: 0 })
-
-    .set(introTop, {
-        boxShadow: '0 3px 35px 4px rgba(214,212,204,0.25), 0 1px 6px rgba(214,212,204,0.5)',
-    })
-    .set(introBottom, {
-        boxShadow: '0 -3px 35px 4px rgba(214,212,204,0.25), 0 -1px 6px rgba(214,212,204,0.5)',
-    })
 
     .to(introTop, { yPercent: -100, duration: 1.4, ease: 'power3.inOut' })
     .to(introBottom, { yPercent: 100, duration: 1.4, ease: 'power3.inOut' }, '<')
-
-    .to(introTop, {
-        boxShadow: '0 3px 35px 4px transparent, 0 1px 6px transparent',
-        duration: 0.8,
-    }, '<+0.3')
-    .to(introBottom, {
-        boxShadow: '0 -3px 35px 4px transparent, 0 -1px 6px transparent',
-        duration: 0.8,
-    }, '<')
 
     .to(noise, { opacity: 0.02, duration: 1 }, '-=0.8')
     .set(intro, { display: 'none' })
