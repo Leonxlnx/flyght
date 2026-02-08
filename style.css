@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Cinematic Experience
-   Creative, editorial, agency-level design
+   FLYGHT — Cinematic Hero
+   Monochrome + subtle warmth. No gold. No green. No violet.
    ════════════════════════════════════════════════════════ */
 
 /* ── Reset ────────────────────────────────────────────── */
@@ -14,38 +14,19 @@
 }
 
 :root {
-    /*
-   * Palette: "Midnight Teal & Rose"
-   * No gold, no violet, no yellow.
-   * Deep cool dark, muted teal accent, dusty rose warmth.
-   */
-    --bg: #0c0e16;
-    --bg-deep: #080a10;
-    --text: #cfd1d9;
-    --text-bright: #eceef4;
-    --text-dim: rgba(207, 209, 217, 0.28);
-    --text-ghost: rgba(207, 209, 217, 0.06);
+    --bg: #09090d;
+    --text: #b8b8c0;
+    --text-bright: #e8e8f0;
+    --text-dim: rgba(184, 184, 192, 0.22);
+    --text-ghost: rgba(184, 184, 192, 0.06);
+    --glow: rgba(210, 210, 225, 0.6);
+    --glow-soft: rgba(210, 210, 225, 0.08);
+    --line-color: rgba(184, 184, 192, 0.08);
 
-    --accent: #5c8f8f;
-    /* muted teal */
-    --accent-light: #7ab3b0;
-    --accent-dim: rgba(92, 143, 143, 0.15);
-
-    --warm: #9e6e6e;
-    /* dusty rose */
-    --warm-dim: rgba(158, 110, 110, 0.12);
-
-    --line: rgba(207, 209, 217, 0.06);
-
-    /* Fonts */
     --f-display: 'Syne', sans-serif;
     --f-body: 'Space Grotesk', sans-serif;
     --f-mono: 'Space Mono', monospace;
     --f-serif: 'Instrument Serif', serif;
-}
-
-html {
-    cursor: none;
 }
 
 body {
@@ -53,74 +34,26 @@ body {
     color: var(--text);
     font-family: var(--f-body);
     overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    cursor: none;
 }
 
 ::selection {
-    background: var(--accent);
-    color: var(--bg);
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
 }
 
-/* ── Custom Cursor ────────────────────────────────────── */
-
-.cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10000;
-    pointer-events: none;
-    mix-blend-mode: difference;
-}
-
-.cursor-dot {
-    width: 5px;
-    height: 5px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: -2.5px;
-    left: -2.5px;
-}
-
-.cursor-circle {
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    position: absolute;
-    top: -22px;
-    left: -22px;
-    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-        height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-        top 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-        left 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-        border-color 0.4s ease;
-}
-
-.cursor.hovering .cursor-circle {
-    width: 72px;
-    height: 72px;
-    top: -36px;
-    left: -36px;
-    border-color: var(--accent-light);
-}
-
-.cursor.hovering .cursor-dot {
-    transform: scale(0);
-}
-
-/* ── Intro Overlay ────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════
+   INTRO OVERLAY
+   Sits ON TOP of the hero. Hero is behind it.
+   ════════════════════════════════════════════════════════ */
 
 .intro {
     position: fixed;
     inset: 0;
-    z-index: 9000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 100;
+    pointer-events: none;
 }
 
 .intro-bar {
@@ -128,19 +61,20 @@ body {
     left: 0;
     right: 0;
     background: #000;
-    z-index: 2;
 }
 
 .intro-top {
     top: 0;
-    height: 50vh;
-    transform-origin: center top;
+    height: 50%;
+    /* Glowing bottom edge — activated by GSAP */
+    box-shadow: none;
 }
 
 .intro-bottom {
     bottom: 0;
-    height: 50vh;
-    transform-origin: center bottom;
+    height: 50%;
+    /* Glowing top edge — activated by GSAP */
+    box-shadow: none;
 }
 
 .intro-line {
@@ -149,164 +83,117 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 0;
-    height: 1px;
-    background: var(--accent-light);
-    z-index: 3;
-    box-shadow: 0 0 20px 4px rgba(122, 179, 176, 0.2),
-        0 0 60px 10px rgba(122, 179, 176, 0.05);
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--glow-soft) 15%,
+            var(--glow) 50%,
+            var(--glow-soft) 85%,
+            transparent 100%);
+    z-index: 10;
+    opacity: 0;
 }
 
 .intro-counter {
     position: absolute;
-    z-index: 4;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
     font-family: var(--f-mono);
-    font-size: clamp(0.75rem, 1vw, 0.9rem);
-    letter-spacing: 0.25em;
-    color: rgba(255, 255, 255, 0.35);
+    font-size: clamp(0.7rem, 1vw, 0.85rem);
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.3);
     opacity: 0;
 }
 
-/* ── Noise Texture ────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════
+   NOISE + VIGNETTE
+   ════════════════════════════════════════════════════════ */
 
 .noise {
     position: fixed;
     inset: 0;
-    z-index: 8999;
+    z-index: 90;
     pointer-events: none;
     opacity: 0;
-    mix-blend-mode: soft-light;
 }
 
 .noise::after {
     content: '';
     position: absolute;
-    inset: -150%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
-    animation: noiseMove 0.4s steps(8) infinite;
+    inset: -200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    animation: grainShift 0.5s steps(6) infinite;
+    mix-blend-mode: overlay;
 }
 
-@keyframes noiseMove {
+@keyframes grainShift {
     0% {
         transform: translate(0, 0);
     }
 
-    25% {
-        transform: translate(-8%, 6%);
+    20% {
+        transform: translate(-5%, -8%);
     }
 
-    50% {
-        transform: translate(4%, -10%);
+    40% {
+        transform: translate(7%, 3%);
     }
 
-    75% {
-        transform: translate(-6%, 3%);
+    60% {
+        transform: translate(-3%, 6%);
+    }
+
+    80% {
+        transform: translate(5%, -5%);
     }
 
     100% {
         transform: translate(0, 0);
     }
 }
-
-/* ── Vignette ─────────────────────────────────────────── */
 
 .vignette {
     position: fixed;
     inset: 0;
-    z-index: 3;
+    z-index: 4;
     pointer-events: none;
-    background: radial-gradient(ellipse 80% 80% at center,
-            transparent 30%,
-            rgba(8, 10, 16, 0.7) 100%);
+    background: radial-gradient(ellipse 70% 70% at center,
+            transparent 20%,
+            rgba(9, 9, 13, 0.75) 100%);
     opacity: 0;
 }
 
-/* ── Living Gradient Background ───────────────────────── */
-
-.gradient-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    opacity: 0;
-    overflow: hidden;
-}
-
-.gradient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    will-change: transform;
-}
-
-.gradient-orb--1 {
-    width: 50vw;
-    height: 50vw;
-    top: -15%;
-    left: -10%;
-    background: radial-gradient(circle, rgba(92, 143, 143, 0.10) 0%, transparent 70%);
-    animation: orbDrift1 25s ease-in-out infinite alternate;
-}
-
-.gradient-orb--2 {
-    width: 45vw;
-    height: 45vw;
-    bottom: -20%;
-    right: -10%;
-    background: radial-gradient(circle, rgba(158, 110, 110, 0.08) 0%, transparent 70%);
-    animation: orbDrift2 30s ease-in-out infinite alternate;
-}
-
-.gradient-orb--3 {
-    width: 35vw;
-    height: 35vw;
-    top: 40%;
-    left: 50%;
-    background: radial-gradient(circle, rgba(92, 143, 143, 0.05) 0%, transparent 70%);
-    animation: orbDrift3 20s ease-in-out infinite alternate;
-}
-
-@keyframes orbDrift1 {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    100% {
-        transform: translate(10vw, 8vh) scale(1.15);
-    }
-}
-
-@keyframes orbDrift2 {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    100% {
-        transform: translate(-12vw, -6vh) scale(1.1);
-    }
-}
-
-@keyframes orbDrift3 {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    100% {
-        transform: translate(-8vw, 10vh) scale(0.9);
-    }
-}
-
-/* ── Hero ─────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════
+   HERO
+   Always rendered — revealed by intro bars opening
+   ════════════════════════════════════════════════════════ */
 
 .hero {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 5;
-    gap: 0;
+    padding: 2rem;
+    overflow: hidden;
+}
+
+/* Background glow — subtle, non-colored, adds depth */
+.hero-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 35% 40%, rgba(255, 255, 255, 0.015) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 70% 65%, rgba(255, 255, 255, 0.01) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 /* ── Eyebrow ──────────────────────────────────────────── */
@@ -314,15 +201,17 @@ body {
 .eyebrow {
     display: flex;
     align-items: center;
-    gap: 1.2rem;
-    margin-bottom: 1.8rem;
+    gap: 1rem;
+    margin-bottom: clamp(1.2rem, 3vh, 2.5rem);
     opacity: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .eyebrow-text {
     font-family: var(--f-mono);
-    font-size: clamp(0.55rem, 0.8vw, 0.68rem);
-    letter-spacing: 0.4em;
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--text-dim);
     white-space: nowrap;
@@ -331,60 +220,56 @@ body {
 .eyebrow-line {
     width: 0;
     height: 1px;
-    background: var(--accent-dim);
+    background: var(--line-color);
 }
 
 /* ── Title ────────────────────────────────────────────── */
 
 .title {
     font-family: var(--f-display);
-    font-size: clamp(5rem, 17vw, 16rem);
+    font-size: clamp(2.8rem, 11vw, 11rem);
     font-weight: 800;
-    letter-spacing: 0.08em;
-    line-height: 0.88;
+    letter-spacing: clamp(0.15em, 3vw, 0.45em);
+    line-height: 1;
     display: flex;
-    gap: 0.015em;
+    justify-content: center;
     position: relative;
+    z-index: 1;
+    margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
 }
 
-.title-mask {
-    display: inline-block;
+.title-wrap {
+    display: inline-flex;
     overflow: hidden;
-    position: relative;
 }
 
 .title-char {
     display: inline-block;
-    transform: translateY(115%);
-
-    /* Subtle gradient — not gold, not monochrome */
-    background: linear-gradient(170deg,
-            var(--text-bright) 0%,
-            var(--text) 40%,
-            var(--accent-light) 80%,
-            var(--text-dim) 100%);
-    background-size: 100% 300%;
-    background-position: 0% 0%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
+    transform: translateY(110%);
+    color: var(--text-bright);
     will-change: transform;
-    cursor: none;
-    transition: filter 0.3s ease;
+    transition: color 0.4s ease;
 }
 
 .title-char:hover {
-    filter: drop-shadow(0 0 30px rgba(122, 179, 176, 0.25));
+    color: #fff;
 }
 
-/* ── Title Accent Line ────────────────────────────────── */
-
-.title-accent {
-    width: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-dim), var(--accent), var(--accent-dim), transparent);
-    margin: 1.5rem 0 2rem;
+/* Sweep light — moves across title after reveal */
+.title-sweep {
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 15%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.06),
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.06),
+            transparent);
+    z-index: 2;
+    pointer-events: none;
     opacity: 0;
 }
 
@@ -392,22 +277,24 @@ body {
 
 .tagline {
     text-align: center;
-    margin-bottom: 2.8rem;
+    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+    position: relative;
+    z-index: 1;
 }
 
-.tagline-mask {
+.tag-wrap {
     display: block;
     overflow: hidden;
 }
 
-.tagline-inner {
+.tag-inner {
     display: block;
     transform: translateY(110%);
     font-family: var(--f-serif);
     font-style: italic;
-    font-size: clamp(1rem, 2vw, 1.45rem);
+    font-size: clamp(0.9rem, 1.6vw, 1.3rem);
     color: var(--text-dim);
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
 /* ── Film Index ───────────────────────────────────────── */
@@ -416,19 +303,20 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.3rem 1.8rem;
-    max-width: 700px;
-    margin-bottom: 3rem;
+    gap: 0.2rem 1.4rem;
+    max-width: 680px;
+    margin-bottom: clamp(1.5rem, 4vh, 3rem);
     opacity: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .film-entry {
     display: flex;
     align-items: baseline;
-    gap: 0.5rem;
-    padding: 0.3rem 0;
+    gap: 0.45rem;
+    padding: 0.35rem 0;
     position: relative;
-    cursor: none;
 }
 
 .film-entry::after {
@@ -438,7 +326,7 @@ body {
     left: 0;
     width: 0;
     height: 1px;
-    background: var(--accent);
+    background: var(--text-dim);
     transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -448,80 +336,79 @@ body {
 
 .film-num {
     font-family: var(--f-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    opacity: 0.6;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    transition: color 0.3s ease;
 }
 
 .film-name {
     font-family: var(--f-body);
-    font-size: clamp(0.6rem, 0.82vw, 0.72rem);
+    font-size: clamp(0.55rem, 0.75vw, 0.68rem);
     font-weight: 300;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-dim);
-    transition: color 0.4s ease;
+    transition: color 0.3s ease;
 }
 
-.film-entry:hover .film-name {
-    color: var(--text-bright);
-}
-
+.film-entry:hover .film-name,
 .film-entry:hover .film-num {
-    opacity: 1;
+    color: var(--text-bright);
 }
 
 /* ── CTA ──────────────────────────────────────────────── */
 
 .cta {
     opacity: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .cta-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
-    padding: 0.9rem 2rem;
+    gap: 0.7rem;
+    padding: 0.85rem 1.8rem;
     background: transparent;
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-color);
     color: var(--text-dim);
     font-family: var(--f-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    cursor: none;
-    position: relative;
+    cursor: pointer;
     overflow: hidden;
-    transition: color 0.5s ease, border-color 0.5s ease;
+    position: relative;
+    transition: color 0.4s ease, border-color 0.4s ease;
 }
 
 .cta-btn::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--accent-dim), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(255, 255, 255, 0.03);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cta-btn:hover::before {
-    transform: translateX(0);
+    transform: scaleX(1);
 }
 
 .cta-btn:hover {
     color: var(--text-bright);
-    border-color: var(--accent);
+    border-color: rgba(184, 184, 192, 0.2);
 }
 
-.cta-label {
+.cta-label,
+.cta-icon {
     position: relative;
     z-index: 1;
 }
 
 .cta-icon {
-    position: relative;
-    z-index: 1;
     animation: arrowFloat 2.5s ease-in-out infinite;
 }
 
@@ -537,93 +424,37 @@ body {
     }
 }
 
-/* ── Corner Markers ───────────────────────────────────── */
-
-.marker {
-    position: fixed;
-    font-family: var(--f-mono);
-    font-size: 0.5rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--text-ghost);
-    z-index: 6;
-    opacity: 0;
-}
-
-.marker--tl {
-    top: 2rem;
-    left: 2.5rem;
-}
-
-.marker--tr {
-    top: 2rem;
-    right: 2.5rem;
-}
-
-.marker--bl {
-    bottom: 2rem;
-    left: 2.5rem;
-}
-
-.marker--br {
-    bottom: 2rem;
-    right: 2.5rem;
-}
-
-/* ── Responsive ───────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
-    .marker {
-        display: none;
-    }
-
-    .title {
-        font-size: clamp(3.5rem, 20vw, 8rem);
-        letter-spacing: 0.05em;
+    .hero {
+        padding: 1.5rem;
     }
 
     .film-index {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.3rem;
+        gap: 0.15rem 0.8rem;
     }
 
     .eyebrow {
-        gap: 0.8rem;
-    }
-
-    .eyebrow-text {
-        font-size: 0.5rem;
-        letter-spacing: 0.3em;
+        gap: 0.6rem;
     }
 }
 
 @media (max-width: 480px) {
-    .title {
-        font-size: clamp(2.8rem, 22vw, 5rem);
+    .film-index {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
     }
 
-    .tagline-inner {
-        font-size: 0.9rem;
-    }
-}
-
-/* ── Utility: no cursor on touch ──────────────────────── */
-
-@media (hover: none) and (pointer: coarse) {
-
-    html,
-    body {
-        cursor: auto;
-    }
-
-    .cursor {
+    .eyebrow-line {
         display: none;
     }
 
-    .cta-btn,
-    .film-entry,
-    .title-char {
-        cursor: auto;
+    .eyebrow-text {
+        font-size: 0.45rem;
+        letter-spacing: 0.25em;
     }
 }

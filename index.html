@@ -19,12 +19,6 @@
 
 <body>
 
-    <!-- ═══════ CURSOR ═══════ -->
-    <div class="cursor" id="cursor">
-        <div class="cursor-dot"></div>
-        <div class="cursor-circle"></div>
-    </div>
-
     <!-- ═══════ INTRO SEQUENCE ═══════ -->
     <div class="intro" id="intro">
         <div class="intro-bar intro-top" id="introTop"></div>
@@ -37,87 +31,61 @@
     <div class="noise" aria-hidden="true"></div>
     <div class="vignette" aria-hidden="true"></div>
 
-    <!-- ═══════ LIVING GRADIENT BG ═══════ -->
-    <div class="gradient-bg" aria-hidden="true">
-        <div class="gradient-orb gradient-orb--1"></div>
-        <div class="gradient-orb gradient-orb--2"></div>
-        <div class="gradient-orb gradient-orb--3"></div>
-    </div>
-
-    <!-- ═══════ HERO ═══════ -->
+    <!-- ═══════ HERO (always rendered, behind intro) ═══════ -->
     <section class="hero" id="hero">
+
+        <!-- Subtle background glow -->
+        <div class="hero-glow"></div>
 
         <!-- Eyebrow -->
         <div class="eyebrow" id="eyebrow">
-            <div class="eyebrow-line" id="eyebrowLineL"></div>
+            <div class="eyebrow-line eyebrow-line--l"></div>
             <span class="eyebrow-text">The Greatest Flights in Cinema</span>
-            <div class="eyebrow-line" id="eyebrowLineR"></div>
+            <div class="eyebrow-line eyebrow-line--r"></div>
         </div>
 
         <!-- Title -->
         <h1 class="title" id="title">
-            <span class="title-mask"><span class="title-char" data-char="F">F</span></span>
-            <span class="title-mask"><span class="title-char" data-char="L">L</span></span>
-            <span class="title-mask"><span class="title-char" data-char="Y">Y</span></span>
-            <span class="title-mask"><span class="title-char" data-char="G">G</span></span>
-            <span class="title-mask"><span class="title-char" data-char="H">H</span></span>
-            <span class="title-mask"><span class="title-char" data-char="T">T</span></span>
+            <span class="title-wrap"><span class="title-char">F</span></span>
+            <span class="title-wrap"><span class="title-char">L</span></span>
+            <span class="title-wrap"><span class="title-char">Y</span></span>
+            <span class="title-wrap"><span class="title-char">G</span></span>
+            <span class="title-wrap"><span class="title-char">H</span></span>
+            <span class="title-wrap"><span class="title-char">T</span></span>
         </h1>
 
-        <!-- Accent Line Through Title -->
-        <div class="title-accent" id="titleAccent"></div>
+        <!-- Sweep light -->
+        <div class="title-sweep" id="titleSweep"></div>
 
         <!-- Tagline -->
         <p class="tagline" id="tagline">
-            <span class="tagline-mask"><span class="tagline-inner">Six films that let us</span></span>
-            <span class="tagline-mask"><span class="tagline-inner">feel what it means to fly.</span></span>
+            <span class="tag-wrap"><span class="tag-inner">Six films that let us</span></span>
+            <span class="tag-wrap"><span class="tag-inner">feel what it means to fly.</span></span>
         </p>
 
         <!-- Film Index -->
         <div class="film-index" id="filmIndex">
-            <div class="film-entry">
-                <span class="film-num">01</span>
-                <span class="film-name">Top Gun: Maverick</span>
+            <div class="film-entry"><span class="film-num">01</span><span class="film-name">Top Gun: Maverick</span>
             </div>
-            <div class="film-entry">
-                <span class="film-num">02</span>
-                <span class="film-name">Interstellar</span>
-            </div>
-            <div class="film-entry">
-                <span class="film-num">03</span>
-                <span class="film-name">The Aviator</span>
-            </div>
-            <div class="film-entry">
-                <span class="film-num">04</span>
-                <span class="film-name">Dunkirk</span>
-            </div>
-            <div class="film-entry">
-                <span class="film-num">05</span>
-                <span class="film-name">Gravity</span>
-            </div>
-            <div class="film-entry">
-                <span class="film-num">06</span>
-                <span class="film-name">How to Train Your Dragon</span>
-            </div>
+            <div class="film-entry"><span class="film-num">02</span><span class="film-name">Interstellar</span></div>
+            <div class="film-entry"><span class="film-num">03</span><span class="film-name">The Aviator</span></div>
+            <div class="film-entry"><span class="film-num">04</span><span class="film-name">Dunkirk</span></div>
+            <div class="film-entry"><span class="film-num">05</span><span class="film-name">Gravity</span></div>
+            <div class="film-entry"><span class="film-num">06</span><span class="film-name">How to Train Your
+                    Dragon</span></div>
         </div>
 
         <!-- CTA -->
         <div class="cta" id="cta">
             <button class="cta-btn" id="ctaBtn">
                 <span class="cta-label">Begin the Journey</span>
-                <svg class="cta-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
-                    stroke-width="1.2">
-                    <line x1="10" y1="3" x2="10" y2="17" />
-                    <polyline points="16 11 10 17 4 11" />
+                <svg class="cta-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                    stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="9" y1="3" x2="9" y2="15" />
+                    <polyline points="14 10 9 15 4 10" />
                 </svg>
             </button>
         </div>
-
-        <!-- Corner Markers -->
-        <div class="marker marker--tl"><span>FLYGHT</span></div>
-        <div class="marker marker--tr"><span>2024</span></div>
-        <div class="marker marker--bl"><span>001 — 006</span></div>
-        <div class="marker marker--br"><span>Scroll ↓</span></div>
 
     </section>
 
