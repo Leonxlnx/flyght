@@ -188,7 +188,15 @@ function initTakeoff() {
                 y: 0,
                 duration: 1.2,
                 ease: 'power3.out',
-            }, '-=0.1');
+            }, '-=0.1')
+
+            // ── Phase 5: Navigate to film page ──
+            .to({}, {
+                duration: 1.5,
+                onComplete() {
+                    window.location.href = '/films/top-gun-maverick/';
+                },
+            });
     });
 }
 
