@@ -97,7 +97,8 @@ function initTakeoff() {
         // Hide icon in button
         gsap.to(ctaIcon, { opacity: 0, duration: 0.1 });
 
-        // Position flying plane at icon spot, facing right & slightly up
+        // Position flying plane at icon spot
+        // SVG points UP by default. rotation:90 = facing RIGHT
         gsap.set(flyingPlane, {
             left: startX,
             top: startY,
@@ -105,7 +106,7 @@ function initTakeoff() {
             yPercent: -50,
             scale: 1,
             opacity: 1,
-            rotation: -30,   // angled up-right for takeoff
+            rotation: 75,   // facing right, slightly angled up
         });
 
         const tl2 = gsap.timeline();
@@ -116,7 +117,7 @@ function initTakeoff() {
             left: vw + 150,          // exit right edge
             top: startY - vh * 0.4,  // fly upward
             scale: 6,                // getting bigger
-            rotation: -25,           // slight angle
+            rotation: 75,            // nose pointing right (up-right trajectory)
             duration: 1.2,
             ease: 'power2.in',       // accelerates — feels like thrust
         })
@@ -135,14 +136,14 @@ function initTakeoff() {
                 xPercent: -50,
                 yPercent: -50,
                 scale: 45,             // MASSIVE
-                rotation: -10,
+                rotation: 90,          // nose pointing right
                 opacity: 1,
             })
 
             // Sweep across the screen left → right
             .to(flyingPlane, {
                 left: vw * 1.5,
-                rotation: 0,
+                rotation: 90,          // keep nose pointing right
                 duration: 1.0,
                 ease: 'power1.inOut',
             })
