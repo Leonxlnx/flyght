@@ -106,7 +106,7 @@ function initTakeoff() {
             yPercent: -50,
             scale: 1,
             opacity: 1,
-            rotation: 75,   // facing right, slightly angled up
+            rotation: 60,   // matches CSS hover state exactly
         });
 
         const tl2 = gsap.timeline();
@@ -117,7 +117,7 @@ function initTakeoff() {
             left: vw + 150,          // exit right edge
             top: startY - vh * 0.4,  // fly upward
             scale: 6,                // getting bigger
-            rotation: 75,            // nose pointing right (up-right trajectory)
+            rotation: 60,            // same angle as hover — no visual jump
             duration: 1.2,
             ease: 'power2.in',       // accelerates — feels like thrust
         })
