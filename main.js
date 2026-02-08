@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Intro + Hero Animations
-   Custom title image with reveal mask
+   FLYGHT — Intro + Hero + Takeoff Transition
+   Title 3D tilt on mouse, CTA triggers plane flyout
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -16,14 +16,178 @@ const noise = document.querySelector('.noise');
 
 const heroSub = document.getElementById('heroSub');
 const heroTitleImg = document.getElementById('heroTitleImg');
+const titleReveal = document.getElementById('titleReveal');
 const heroDivider = document.getElementById('heroDivider');
 const dividerLines = document.querySelectorAll('.divider-line');
 const heroDesc = document.getElementById('heroDesc');
 const ctaWrap = document.getElementById('ctaWrap');
+const ctaBtn = document.querySelector('.cta-btn');
+const ctaIcon = document.querySelector('.cta-icon');
 const manifestRows = document.querySelectorAll('.manifest-row');
 
+// Takeoff
+const takeoffOverlay = document.getElementById('takeoffOverlay');
+const takeoffPlane = document.getElementById('takeoffPlane');
+const takeoffCard = document.getElementById('takeoffCard');
+
 // ════════════════════════════════════════════════════════
-//   MASTER TIMELINE
+//   3D TITLE TILT ON MOUSE MOVE
+//   
+//   Subtle rotation following cursor position.
+//   X moves → rotateY, Y moves → rotateX (inverted).
+//   Max ±6° — just enough to feel alive.
+// ════════════════════════════════════════════════════════
+
+let titleReady = false; // only tilt after intro animation
+
+function initTitleTilt() {
+    if (!titleReveal || !heroTitleImg) return;
+
+    const maxRotX = 6;  // degrees
+    const maxRotY = 8;
+
+    document.addEventListener('mousemove', (e) => {
+        if (!titleReady) return;
+
+        const rect = titleReveal.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        // Distance from title center, normalized -1 to 1
+        const nx = (e.clientX - cx) / (window.innerWidth / 2);
+        const ny = (e.clientY - cy) / (window.innerHeight / 2);
+
+        // Clamp to ±1
+        const clampedX = Math.max(-1, Math.min(1, nx));
+        const clampedY = Math.max(-1, Math.min(1, ny));
+
+        gsap.to(heroTitleImg, {
+            rotateY: clampedX * maxRotY,
+            rotateX: clampedY * -maxRotX,
+            duration: 1.2,
+            ease: 'power2.out',
+            overwrite: 'auto',
+        });
+    });
+
+    // Reset on mouse leave
+    document.addEventListener('mouseleave', () => {
+        gsap.to(heroTitleImg, {
+            rotateY: 0,
+            rotateX: 0,
+            duration: 1,
+            ease: 'power2.out',
+        });
+    });
+}
+
+initTitleTilt();
+
+// ════════════════════════════════════════════════════════
+//   CTA → TAKEOFF TRANSITION
+//
+//   1. Plane icon flies out of button
+//   2. Spins and grows to fill screen
+//   3. Overlay fades in
+//   4. Film card appears
+// ════════════════════════════════════════════════════════
+
+function initTakeoff() {
+    if (!ctaBtn || !takeoffOverlay || !takeoffPlane || !takeoffCard) return;
+
+    ctaBtn.addEventListener('click', () => {
+        // Get plane icon's position on screen
+        const iconRect = ctaIcon.getBoundingClientRect();
+        const startX = iconRect.left + iconRect.width / 2;
+        const startY = iconRect.top + iconRect.height / 2;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        // Position the overlay plane at the button icon's location
+        gsap.set(takeoffPlane, {
+            left: startX,
+            top: startY,
+            xPercent: -50,
+            yPercent: -50,
+            fontSize: '1.5rem',
+            opacity: 1,
+            rotation: 0,
+            scale: 1,
+        });
+
+        // Activate overlay (starts invisible bg)
+        takeoffOverlay.classList.add('active');
+
+        const tl2 = gsap.timeline();
+
+        // Phase 1: Plane lifts off from button — flies upward and grows
+        tl2.to(takeoffPlane, {
+            left: centerX,
+            top: centerY - 50,
+            fontSize: '4rem',
+            rotation: -35,
+            duration: 0.8,
+            ease: 'power2.in',
+        })
+
+            // Phase 2: Plane does a dramatic spin + huge scale
+            .to(takeoffPlane, {
+                fontSize: '18rem',
+                rotation: -360 - 35,
+                top: centerY,
+                opacity: 0.7,
+                duration: 1.0,
+                ease: 'power3.inOut',
+            })
+
+            // Fade overlay background in during spin
+            .to(takeoffOverlay, {
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.inOut',
+            }, '-=0.8')
+
+            // Hero content fades out
+            .to('.hero-center', {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.5,
+            }, '-=1.0')
+
+            .to('.manifest', {
+                opacity: 0,
+                x: 30,
+                duration: 0.4,
+            }, '<')
+
+            // Phase 3: Plane fades away
+            .to(takeoffPlane, {
+                opacity: 0,
+                fontSize: '30rem',
+                duration: 0.6,
+                ease: 'power2.in',
+            })
+
+            // Phase 4: Film card emerges
+            .to(takeoffCard, {
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power2.out',
+            }, '-=0.2')
+
+            .from(takeoffCard, {
+                y: 40,
+                scale: 0.92,
+                duration: 1,
+                ease: 'power3.out',
+            }, '<');
+    });
+}
+
+initTakeoff();
+
+// ════════════════════════════════════════════════════════
+//   MASTER TIMELINE — INTRO + HERO
 // ════════════════════════════════════════════════════════
 
 const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
@@ -103,6 +267,9 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         y: 0,
         duration: 1.1,
         ease: 'power4.out',
+        onComplete() {
+            titleReady = true; // enable tilt after reveal
+        },
     }, '-=0.5')
 
     // Divider
