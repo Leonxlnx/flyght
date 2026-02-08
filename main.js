@@ -33,12 +33,6 @@ const takeoffCard = document.getElementById('takeoffCard');
 const flyingPlane = document.getElementById('flyingPlane');
 
 const hero = document.getElementById('hero');
-const filmView = document.getElementById('filmView');
-const fvNumber = document.getElementById('fvNumber');
-const fvTitle = document.getElementById('fvTitle');
-const fvMeta = document.getElementById('fvMeta');
-const fvQuote = document.getElementById('fvQuote');
-const fvManifest = document.getElementById('fvManifest');
 
 // ════════════════════════════════════════════════════════
 //   3D TITLE TILT
@@ -187,7 +181,7 @@ function initTakeoff() {
             // Hide plane after sweep
             .set(flyingPlane, { opacity: 0 })
 
-            // ── Phase 4: TOP GUN: MAVERICK fades in clean ──
+            // ── Phase 4: TOP GUN: MAVERICK fades in — and stays ──
             .fromTo(takeoffCard, {
                 opacity: 0,
                 y: 25,
@@ -196,45 +190,7 @@ function initTakeoff() {
                 y: 0,
                 duration: 1.2,
                 ease: 'power3.out',
-            }, '-=0.1')
-
-            // ── Phase 5: Transition to film view (same page) ──
-            .to(takeoffCard, {
-                opacity: 0,
-                duration: 0.6,
-                ease: 'power2.in',
-            }, '+=1.0')
-
-            // Show film view behind overlay
-            .set(filmView, { opacity: 1, visibility: 'visible' })
-
-            // Fade out overlay to reveal film view
-            .to(takeoffOverlay, {
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power2.inOut',
-                onComplete() {
-                    takeoffOverlay.style.visibility = 'hidden';
-                    hero.style.display = 'none';
-                },
-            })
-
-            // Film content reveals
-            .to(fvNumber, {
-                opacity: 1, y: 0, duration: 0.5, ease: 'power3.out',
-            }, '-=0.3')
-            .to(fvTitle, {
-                opacity: 1, y: 0, duration: 0.9, ease: 'power4.out',
-            }, '-=0.3')
-            .to(fvMeta, {
-                opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
-            }, '-=0.5')
-            .to(fvQuote, {
-                opacity: 1, duration: 0.7, ease: 'power3.out',
-            }, '-=0.3')
-            .to(fvManifest, {
-                opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
-            }, '-=0.3');
+            }, '-=0.1');
     });
 }
 
