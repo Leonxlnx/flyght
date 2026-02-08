@@ -33,25 +33,29 @@
     <!-- ═══════ HERO ═══════ -->
     <section class="hero" id="hero">
 
+        <!-- Video Background -->
         <div class="hero-bg">
-            <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1920&q=80&auto=format"
-                alt="Airplane wing view at sunset" class="hero-bg-img" loading="eager" />
+            <video autoplay muted loop playsinline class="hero-bg-video"
+                poster="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1920&q=80&auto=format">
+                <source src="https://cdn.pixabay.com/video/2020/05/25/40163-424930032_large.mp4" type="video/mp4" />
+            </video>
             <div class="hero-bg-overlay"></div>
         </div>
 
-        <!-- ── Center Content ─────────────────────────────── -->
+        <!-- Center Content -->
         <div class="hero-center">
 
             <p class="hero-sub" id="heroSub">Where cinema takes flight</p>
 
             <div class="title-reveal" id="titleReveal">
-                <h1 class="hero-title">
-                    <span class="t t-lg">F</span>
-                    <span class="t t-md">L</span>
-                    <span class="t t-sm">Y</span>
-                    <span class="t t-sm">G</span>
-                    <span class="t t-md">H</span>
-                    <span class="t t-lg">T</span>
+                <h1 class="hero-title" id="heroTitle">
+                    <!-- Letters positioned via JS along a smooth parabolic arc -->
+                    <span class="t" data-i="0">F</span>
+                    <span class="t" data-i="1">L</span>
+                    <span class="t" data-i="2">Y</span>
+                    <span class="t" data-i="3">G</span>
+                    <span class="t" data-i="4">H</span>
+                    <span class="t" data-i="5">T</span>
                 </h1>
             </div>
 
@@ -75,7 +79,7 @@
 
         </div>
 
-        <!-- ── Film Manifest (right side) ─────────────────── -->
+        <!-- Film Manifest -->
         <div class="manifest" id="manifest">
             <div class="manifest-row">
                 <span class="manifest-num">01</span>

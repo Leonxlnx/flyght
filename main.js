@@ -1,6 +1,5 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Intro + Hero Animations
-   Clean title reveal (no letter-by-letter)
+   FLYGHT — Smooth Parabolic Title + Intro + Video BG
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -15,12 +14,67 @@ const introCounter = document.getElementById('introCounter');
 const noise = document.querySelector('.noise');
 
 const heroSub = document.getElementById('heroSub');
-const heroTitle = document.querySelector('.hero-title');
+const heroTitle = document.getElementById('heroTitle');
 const heroDivider = document.getElementById('heroDivider');
 const dividerLines = document.querySelectorAll('.divider-line');
 const heroDesc = document.getElementById('heroDesc');
 const ctaWrap = document.getElementById('ctaWrap');
 const manifestRows = document.querySelectorAll('.manifest-row');
+
+// ════════════════════════════════════════════════════════
+//   PARABOLIC TITLE SIZING
+//   
+//   Mathematical parabola: size(i) = minSize + (maxSize - minSize) × t²
+//   where t = normalized distance from center (0 at center, 1 at edges)
+//   
+//   Creates a smooth ∪ curve:
+//   Bottom = flat baseline (flex-end)
+//   Top = parabolic arc (bigger at edges, smaller in center)
+// ════════════════════════════════════════════════════════
+
+function applyParabolicSizes() {
+    const letters = document.querySelectorAll('.t');
+    const n = letters.length;                // 6
+    const center = (n - 1) / 2;             // 2.5
+    const maxDist = center;                  // 2.5
+
+    // Responsive max/min sizes based on viewport width
+    const vw = window.innerWidth;
+    let maxSize, minSize;
+
+    if (vw > 1200) {
+        maxSize = 15;    // rem — F and T
+        minSize = 6;     // rem — Y and G
+    } else if (vw > 768) {
+        maxSize = 11;
+        minSize = 4.5;
+    } else if (vw > 480) {
+        maxSize = 8;
+        minSize = 3.2;
+    } else {
+        maxSize = 5.5;
+        minSize = 2.2;
+    }
+
+    letters.forEach((letter, i) => {
+        // Distance from center, normalized to 0-1
+        const dist = Math.abs(i - center);
+        const t = dist / maxDist;
+
+        // Smooth parabola: t² gives the curve (quadratic easing)
+        const sizeFactor = t * t;
+        const size = minSize + (maxSize - minSize) * sizeFactor;
+
+        // Set CSS custom property
+        letter.style.setProperty('--s', `${size}rem`);
+    });
+}
+
+// Apply on load + resize
+applyParabolicSizes();
+window.addEventListener('resize', () => {
+    requestAnimationFrame(applyParabolicSizes);
+});
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
@@ -62,7 +116,7 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power2.out',
     })
 
-    // ── 3. Split — line gone, edges glow ────────────────────
+    // ── 3. Split ────────────────────────────────────────────
 
     .set(introLine, { opacity: 0 })
 
@@ -98,7 +152,7 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power3.out',
     }, '-=0.9')
 
-    // Title — clean single reveal from mask
+    // Title — whole block slides up from mask
     .to(heroTitle, {
         y: 0,
         duration: 1.1,
@@ -125,7 +179,7 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power3.out',
     }, '-=0.3')
 
-    // Manifest rows (from right)
+    // Manifest rows
     .to(manifestRows, {
         opacity: 1,
         duration: 0.4,
@@ -139,17 +193,17 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power2.out',
     }, '<');
 
-// ── Background Parallax ─────────────────────────────────
+// ── Video Background Parallax ───────────────────────────
 
-const bgImg = document.querySelector('.hero-bg-img');
+const bgVideo = document.querySelector('.hero-bg-video');
 
-if (bgImg && window.matchMedia('(hover: hover)').matches) {
+if (bgVideo && window.matchMedia('(hover: hover)').matches) {
     document.addEventListener('mousemove', (e) => {
         const nx = (e.clientX / window.innerWidth - 0.5) * 2;
         const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        gsap.to(bgImg, {
-            x: nx * -10,
-            y: ny * -10,
+        gsap.to(bgVideo, {
+            x: nx * -8,
+            y: ny * -8,
             duration: 2.5,
             ease: 'power2.out',
             overwrite: 'auto',
