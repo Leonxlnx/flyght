@@ -22,30 +22,19 @@
     <!-- ═══════ NOISE ═══════ -->
     <div class="noise" aria-hidden="true"></div>
 
-    <!-- ═══════ BACK NAV ═══════ -->
-    <nav class="film-nav" id="filmNav">
-        <a href="/" class="nav-back" id="navBack">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18">
-                <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span>Flyght</span>
-        </a>
-        <div class="nav-film-indicator">
-            <span class="nav-num">01</span>
-            <span class="nav-separator">·</span>
-            <span class="nav-title">Top Gun: Maverick</span>
-        </div>
-    </nav>
+    <!-- ═══════ HERO (full-screen film reveal) ═══════ -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
 
-    <!-- ═══════ FILM HERO ═══════ -->
-    <section class="film-hero" id="filmHero">
-        <div class="film-hero-bg">
-            <div class="film-hero-gradient"></div>
-        </div>
+        <div class="hero-center" id="heroCenter">
 
-        <div class="film-hero-content">
             <div class="film-number" id="filmNumber">01</div>
-            <h1 class="film-title" id="filmTitle">Top Gun<br /><span class="film-title-accent">Maverick</span></h1>
+
+            <h1 class="film-title" id="filmTitle">
+                <span class="title-line">Top Gun:</span>
+                <span class="title-line title-accent">Maverick</span>
+            </h1>
+
             <div class="film-meta" id="filmMeta">
                 <span>2022</span>
                 <span class="meta-dot">·</span>
@@ -53,121 +42,47 @@
                 <span class="meta-dot">·</span>
                 <span>Action · Drama</span>
             </div>
-        </div>
 
-        <div class="film-hero-quote" id="filmQuote">
-            <span class="quote-mark">"</span>
-            It's not the plane, it's the pilot.
-            <span class="quote-mark">"</span>
-        </div>
-
-        <div class="scroll-hint" id="scrollHint">
-            <div class="scroll-line"></div>
-            <span>Scroll to explore</span>
-        </div>
-    </section>
-
-    <!-- ═══════ THE SCENE ═══════ -->
-    <section class="film-section scene-section" id="sceneSection">
-        <div class="section-label">
-            <span class="label-line"></span>
-            <span class="label-text">The Scene</span>
-        </div>
-        <div class="section-content">
-            <h2 class="section-title" id="sceneTitle">The Canyon Run</h2>
-            <p class="section-body" id="sceneBody">
-                Maverick führt ein Team junger Piloten durch ein enges Bergtal bei Mach 1 ​–
-                unter feindlichem Radar, mit nur Sekunden Spielraum. Die Kamera sitzt im
-                Cockpit, die G-Kräfte sind real. Kein CGI. Echte F/A-18 Super Hornets.
-            </p>
-        </div>
-    </section>
-
-    <!-- ═══════ WHY UNFORGETTABLE ═══════ -->
-    <section class="film-section why-section" id="whySection">
-        <div class="section-label">
-            <span class="label-line"></span>
-            <span class="label-text">Why It's Unforgettable</span>
-        </div>
-        <div class="section-content">
-            <p class="section-body" id="whyBody">
-                Tom Cruise bestand darauf, dass die Schauspieler in echten Jets fliegen.
-                Die Kamerateams entwickelten spezielle Halterungen für die Cockpits. Das
-                Ergebnis: Die authentischsten Flugaufnahmen, die Hollywood je produziert hat.
-                Du spürst die Geschwindigkeit in den Knochen.
-            </p>
-        </div>
-    </section>
-
-    <!-- ═══════ FACTS ═══════ -->
-    <section class="film-section facts-section" id="factsSection">
-        <div class="section-label">
-            <span class="label-line"></span>
-            <span class="label-text">Key Facts</span>
-        </div>
-        <div class="facts-grid">
-            <div class="fact-card" id="fact1">
-                <div class="fact-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28"
-                        height="28">
-                        <path
-                            d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <div class="fact-content">
-                    <span class="fact-label">Training</span>
-                    <p class="fact-text">Die Darsteller absolvierten ein dreimonatiges Flugtraining</p>
-                </div>
+            <div class="film-quote" id="filmQuote">
+                <span class="quote-mark">"</span>
+                It's not the plane, it's the pilot.
+                <span class="quote-mark">"</span>
             </div>
-            <div class="fact-card" id="fact2">
-                <div class="fact-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
-                        <path
-                            d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
-                    </svg>
-                </div>
-                <div class="fact-content">
-                    <span class="fact-label">Authentizität</span>
-                    <p class="fact-text">Echte F/A-18 Super Hornets – kein CGI für die Flugszenen</p>
-                </div>
+
+        </div>
+
+        <!-- Manifest (scene + facts) -->
+        <div class="manifest" id="manifest">
+            <div class="manifest-row">
+                <span class="manifest-label">The Scene</span>
+                <span class="manifest-dash">—</span>
+                <span class="manifest-text">The Canyon Run at Mach 1</span>
             </div>
-            <div class="fact-card" id="fact3">
-                <div class="fact-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28"
-                        height="28">
-                        <path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <div class="fact-content">
-                    <span class="fact-label">G-Kräfte</span>
-                    <p class="fact-text">Bis zu 7,5 G-Kräfte auf die Schauspieler</p>
-                </div>
+            <div class="manifest-row">
+                <span class="manifest-label">Training</span>
+                <span class="manifest-dash">—</span>
+                <span class="manifest-text">3-month flight program for actors</span>
+            </div>
+            <div class="manifest-row">
+                <span class="manifest-label">Aircraft</span>
+                <span class="manifest-dash">—</span>
+                <span class="manifest-text">Real F/A-18 Super Hornets</span>
+            </div>
+            <div class="manifest-row">
+                <span class="manifest-label">G-Forces</span>
+                <span class="manifest-dash">—</span>
+                <span class="manifest-text">Up to 7.5 G on the actors</span>
             </div>
         </div>
     </section>
 
-    <!-- ═══════ NEXT FILM ═══════ -->
-    <section class="film-section next-section" id="nextSection">
-        <div class="next-label">Next Flight</div>
-        <a href="/films/interstellar/" class="next-card" id="nextCard">
-            <span class="next-num">02</span>
-            <h3 class="next-title">Interstellar</h3>
-            <span class="next-meta">2014 · Christopher Nolan</span>
-            <div class="next-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24">
-                    <path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-            </div>
-        </a>
-    </section>
-
-    <!-- ═══════ FOOTER ═══════ -->
-    <footer class="film-footer">
-        <p>Flyght — The Greatest Flights in Cinema</p>
-    </footer>
+    <!-- ═══════ FLYING PLANE (for transition back) ═══════ -->
+    <div class="flying-plane" id="flyingPlane" aria-hidden="true">
+        <svg viewBox="0 0 512 512" fill="currentColor">
+            <path
+                d="M505 17.9C492.3 5.2 473.1-.3 454.5 3.6l-389 97.2c-34.6 8.6-54 45.1-39.7 74.5l48.2 84.3 15.8-9-15.8 9c1.5 2.6 3.4 4.9 5.6 6.9l144.5 126 46.8 125.4c12.8 34.3 50.9 49.8 83.5 33.7l6.7-3.3c17.7-8.8 29.6-26.5 31.1-46.2l28.4-389.1c1.3-21-7.1-41.4-22.3-56.6zM416.3 138.2L180.4 371.2l-42.1-36.8c-4.8-4.2-6.2-11.3-3.2-17l123.3-215.9c2.5-4.4 8.5-4.4 10.4.3l26.3 78.8c3 9.1 14.3 12.3 21.3 5.9l107.3-98.4c6.2-5.7 1.6-15.7-6.4-14.6-.4.1-.7.3-1 .7z" />
+        </svg>
+    </div>
 
     <script type="module" src="./main.js"></script>
 </body>

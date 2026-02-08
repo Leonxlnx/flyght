@@ -1,56 +1,72 @@
 /* ════════════════════════════════════════════════════════
    FLYGHT — Film Page: Top Gun: Maverick
-   Scroll-reveal animations with GSAP + ScrollTrigger
+   Entrance reveal + plane flies right→left to go back
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
+// ── Elements ──
 
-// ── Elements ────────────────────────────────────────────
-
-const filmNav = document.getElementById('filmNav');
+const heroCenter = document.getElementById('heroCenter');
 const filmNumber = document.getElementById('filmNumber');
 const filmTitle = document.getElementById('filmTitle');
 const filmMeta = document.getElementById('filmMeta');
 const filmQuote = document.getElementById('filmQuote');
-const scrollHint = document.getElementById('scrollHint');
+const manifest = document.getElementById('manifest');
+const flyingPlane = document.getElementById('flyingPlane');
 
 // ════════════════════════════════════════════════════════
-//   HERO ENTRANCE ANIMATION
+//   ENTRANCE ANIMATION
+//   Giant plane sweeps right→left revealing the film page
 // ════════════════════════════════════════════════════════
 
-const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+const vw = window.innerWidth;
+const vh = window.innerHeight;
 
-heroTL
-    // Nav slides down
-    .to(filmNav, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-    }, '+=0.3')
+const entranceTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+// Start with a giant plane sweeping RIGHT→LEFT (mirroring the hero exit)
+gsap.set(flyingPlane, {
+    left: vw + 200,
+    top: vh / 2,
+    xPercent: -50,
+    yPercent: -50,
+    scale: 45,
+    rotation: -90,   // nose pointing LEFT (SVG faces up at 0, -90 = left)
+    opacity: 1,
+});
+
+entranceTL
+    // Giant plane sweeps right→left across screen
+    .to(flyingPlane, {
+        left: -vw * 0.5,
+        duration: 1.0,
+        ease: 'power1.inOut',
+    })
+
+    // Hide plane after sweep
+    .set(flyingPlane, { opacity: 0 })
 
     // Film number
     .to(filmNumber, {
         opacity: 1,
         y: 0,
         duration: 0.6,
-    }, '-=0.4')
+    }, '-=0.3')
 
     // Title
     .to(filmTitle, {
         opacity: 1,
         y: 0,
-        duration: 1,
+        duration: 0.9,
         ease: 'power4.out',
-    }, '-=0.3')
+    }, '-=0.35')
 
     // Meta
     .to(filmMeta, {
         opacity: 1,
         y: 0,
-        duration: 0.7,
+        duration: 0.6,
     }, '-=0.5')
 
     // Quote
@@ -59,121 +75,95 @@ heroTL
         duration: 0.8,
     }, '-=0.3')
 
-    // Scroll hint
-    .to(scrollHint, {
-        opacity: 0.6,
-        duration: 0.5,
-    }, '-=0.2');
-
-// ════════════════════════════════════════════════════════
-//   SCROLL-TRIGGERED SECTIONS
-// ════════════════════════════════════════════════════════
-
-// Helper: reveal elements when section enters viewport
-function revealOnScroll(selector, stagger = 0.15) {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach(el => {
-        gsap.to(el, {
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-            },
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power3.out',
-        });
-    });
-}
-
-// Section labels
-revealOnScroll('.section-label');
-
-// Section content blocks
-revealOnScroll('.section-content');
-
-// Fact cards — staggered
-const factCards = document.querySelectorAll('.fact-card');
-if (factCards.length) {
-    gsap.to(factCards, {
-        scrollTrigger: {
-            trigger: '.facts-grid',
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-        },
+    // Manifest
+    .to(manifest, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-    });
-}
-
-// Next film section
-revealOnScroll('.next-label');
-revealOnScroll('.next-card');
+        duration: 0.7,
+    }, '-=0.5');
 
 // ════════════════════════════════════════════════════════
-//   PARALLAX EFFECTS
+//   CLICK ANYWHERE → plane flies RIGHT→LEFT back to hero
 // ════════════════════════════════════════════════════════
 
-// Hero parallax — content moves up slower than scroll
-const heroContent = document.querySelector('.film-hero-content');
-if (heroContent) {
-    gsap.to(heroContent, {
-        scrollTrigger: {
-            trigger: '.film-hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1,
-        },
-        y: -80,
-        opacity: 0.3,
-        ease: 'none',
+let transitioning = false;
+
+document.addEventListener('click', () => {
+    if (transitioning) return;
+    transitioning = true;
+
+    const tl = gsap.timeline();
+
+    // Small plane appears at right edge, flies left across screen
+    gsap.set(flyingPlane, {
+        left: vw + 100,
+        top: vh * 0.45,
+        xPercent: -50,
+        yPercent: -50,
+        scale: 1.5,
+        rotation: -90,  // nose pointing LEFT
+        opacity: 1,
     });
-}
 
-// Quote parallax
-if (filmQuote) {
-    gsap.to(filmQuote, {
-        scrollTrigger: {
-            trigger: '.film-hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1,
-        },
-        y: -40,
-        opacity: 0,
-        ease: 'none',
-    });
-}
+    tl
+        // Plane flies left, getting bigger
+        .to(flyingPlane, {
+            left: -200,
+            top: vh * 0.5,
+            scale: 6,
+            rotation: -90,
+            duration: 1.2,
+            ease: 'power2.in',
+        })
 
-// Hide scroll hint on scroll
-if (scrollHint) {
-    gsap.to(scrollHint, {
-        scrollTrigger: {
-            trigger: '.film-hero',
-            start: 'top top',
-            end: '20% top',
-            scrub: 1,
-        },
-        opacity: 0,
-        y: -15,
-        ease: 'none',
-    });
-}
+        .set(flyingPlane, { opacity: 0 })
 
-// ════════════════════════════════════════════════════════
-//   NAV BACKGROUND INTENSITY ON SCROLL
-// ════════════════════════════════════════════════════════
+        // Brief pause
+        .to({}, { duration: 0.2 })
 
-ScrollTrigger.create({
-    trigger: '.film-hero',
-    start: 'top top',
-    end: '80% top',
-    onUpdate: (self) => {
-        const progress = self.progress;
-        filmNav.style.background = `rgba(6, 6, 9, ${0.6 + progress * 0.3})`;
-    },
+        // GIANT sweep right→left
+        .set(flyingPlane, {
+            left: vw * 1.5,
+            top: vh / 2,
+            xPercent: -50,
+            yPercent: -50,
+            scale: 45,
+            rotation: -90,
+            opacity: 1,
+        })
+
+        .to(flyingPlane, {
+            left: -vw * 0.5,
+            duration: 1.0,
+            ease: 'power1.inOut',
+        })
+
+        // Fade out content as plane sweeps
+        .to(heroCenter, {
+            opacity: 0,
+            x: 80,
+            duration: 0.5,
+            ease: 'power2.in',
+        }, '-=0.9')
+
+        .to(manifest, {
+            opacity: 0,
+            x: 60,
+            duration: 0.4,
+        }, '<')
+
+        .to('.hero-bg', {
+            opacity: 0,
+            duration: 0.4,
+        }, '<+0.1')
+
+        .set(flyingPlane, { opacity: 0 })
+
+        // Navigate back to home
+        .to({}, {
+            duration: 0.3,
+            onComplete() {
+                window.location.href = '/';
+            },
+        });
 });
