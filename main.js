@@ -1,15 +1,12 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — SVG Plane Flight Animation
+   FLYGHT — Clean Plane Takeoff Transition
    
-   MotionPathPlugin for smooth curved flight:
-   → RIGHT → UP → LOOP → keeps looping bigger → 
-   flies AT camera 3D → screen black → film card
+   Click → plane flies up-right out of screen →
+   Giant plane sweeps in from left → wipes to black →
+   Film card appears
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
-import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
-
-gsap.registerPlugin(MotionPathPlugin);
 
 // ── Elements ────────────────────────────────────────────
 
@@ -70,18 +67,16 @@ function initTitleTilt() {
 initTitleTilt();
 
 // ════════════════════════════════════════════════════════
-//   CTA → SMOOTH FLIGHT ANIMATION
+//   CTA TAKEOFF
 //
-//   Flight path (relative to button):
-//   1. Fly RIGHT out of the button
-//   2. Curve UPWARD
-//   3. Full LOOP (like a barrel roll / loop-the-loop)
-//   4. Second wider loop — plane is getting BIGGER
-//   5. Straighten out, fly AT camera (scale explosion)
-//   6. Screen fades to black → film card
-//
-//   All curves are smooth via MotionPathPlugin curviness.
-//   autoRotate makes the plane face its direction of travel.
+//   1. Click → plane exits button diagonally UP-RIGHT
+//      getting bigger as it flies
+//   2. Exits the screen on the RIGHT edge
+//   3. Brief pause — anticipation
+//   4. MASSIVE plane sweeps in from the LEFT
+//      filling the entire screen height
+//   5. As it crosses, everything wipes to black
+//   6. Top Gun: Maverick fades in clean
 // ════════════════════════════════════════════════════════
 
 function initTakeoff() {
@@ -98,17 +93,11 @@ function initTakeoff() {
         const startY = iconRect.top + iconRect.height / 2;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const centerX = vw / 2;
-        const centerY = vh / 2;
-
-        // Loop radius scales with viewport
-        const r1 = Math.min(vw, vh) * 0.14;   // first loop — tight
-        const r2 = Math.min(vw, vh) * 0.22;   // second loop — wider
 
         // Hide icon in button
-        gsap.to(ctaIcon, { opacity: 0, duration: 0.12 });
+        gsap.to(ctaIcon, { opacity: 0, duration: 0.1 });
 
-        // Position flying plane at icon location
+        // Position flying plane at icon spot, facing right & slightly up
         gsap.set(flyingPlane, {
             left: startX,
             top: startY,
@@ -116,127 +105,83 @@ function initTakeoff() {
             yPercent: -50,
             scale: 1,
             opacity: 1,
-            rotation: -90,  // pointing right
+            rotation: -30,   // angled up-right for takeoff
         });
 
         const tl2 = gsap.timeline();
 
-        // ── Phase 1: Fly RIGHT, then curve UP into first loop ──
-        //
-        //   Path (relative coords from start):
-        //
-        //          ╭──3──╮
-        //         ╱       ╲
-        //   1→→→2          4      ← first loop
-        //         ╲       ╱
-        //          ╰──5──╯
-        //              ╲
-        //        ╭──7───╮
-        //       ╱        ╲
-        //      6          8       ← second wider loop  
-        //       ╲        ╱
-        //        ╰──9───╯
-        //             ╲
-        //              10→ CENTER → SCALE UP
-
+        // ── Phase 1: Fly diagonal UP-RIGHT, getting bigger ──
+        // Smooth continuous flight from button to off-screen right
         tl2.to(flyingPlane, {
-            motionPath: {
-                path: [
-                    // 1→2: Fly right
-                    { x: r1 * 1.5, y: 0 },
-                    // 2→3: Curve up-right (entering loop)
-                    { x: r1 * 2.5, y: -r1 * 1.2 },
-                    // 3: Top of first loop
-                    { x: r1 * 1.5, y: -r1 * 2 },
-                    // 4: Left side of loop
-                    { x: r1 * 0.5, y: -r1 * 1.2 },
-                    // 5: Bottom of loop (completing circle)
-                    { x: r1 * 1.5, y: -r1 * 0.2 },
-                ],
-                curviness: 2,
-                autoRotate: true,
-            },
-            scale: 2.5,
-            duration: 1.6,
-            ease: 'power1.inOut',
+            left: vw + 150,          // exit right edge
+            top: startY - vh * 0.4,  // fly upward
+            scale: 6,                // getting bigger
+            rotation: -25,           // slight angle
+            duration: 1.2,
+            ease: 'power2.in',       // accelerates — feels like thrust
         })
 
-            // ── Phase 2: Second wider loop — getting bigger ──
+            // Hide after exit
+            .set(flyingPlane, { opacity: 0 })
+
+            // ── Phase 2: Brief anticipation pause ──
+            .to({}, { duration: 0.3 })
+
+            // ── Phase 3: GIANT plane sweeps in from LEFT ──
+            // Reposition: huge, off-screen left, centered vertically
+            .set(flyingPlane, {
+                left: -vw * 0.5,
+                top: vh / 2,
+                xPercent: -50,
+                yPercent: -50,
+                scale: 45,             // MASSIVE
+                rotation: -10,
+                opacity: 1,
+            })
+
+            // Sweep across the screen left → right
             .to(flyingPlane, {
-                motionPath: {
-                    path: [
-                        // Continue from end of first loop into wider arc
-                        { x: r1 * 1.5 + r2 * 1.2, y: -r1 * 0.2 + r2 * 0.3 },
-                        // Top of second loop
-                        { x: r1 * 1.5 + r2 * 0.6, y: -r1 * 0.2 - r2 * 1.5 },
-                        // Left of second loop
-                        { x: r1 * 1.5 - r2 * 0.8, y: -r1 * 0.2 - r2 * 0.5 },
-                        // Bottom of second loop
-                        { x: r1 * 1.5 + r2 * 0.2, y: -r1 * 0.2 + r2 * 0.8 },
-                        // Straighten — heading toward screen center
-                        { x: centerX - startX, y: centerY - startY },
-                    ],
-                    curviness: 2,
-                    autoRotate: true,
-                },
-                scale: 5,
-                duration: 1.8,
+                left: vw * 1.5,
+                rotation: 0,
+                duration: 1.0,
                 ease: 'power1.inOut',
             })
 
-            // ── Phase 3: Brief pause at center, face forward ──
-            .to(flyingPlane, {
-                rotation: -90,
-                scale: 6,
-                duration: 0.25,
-                ease: 'power2.out',
-            })
-
-            // ── Phase 4: FLY AT CAMERA — 3D SCALE EXPLOSION ──
-            // Keep it moving slightly (y upward) while scaling huge
-            // so it feels like actual forward flight, not static zoom
-            .to(flyingPlane, {
-                scale: 200,
-                y: '-=60',
-                duration: 1.3,
-                ease: 'power2.in',
-            })
-
-            // ── Overlay fades to black during fly-at ──
-            .to(takeoffOverlay, {
-                opacity: 1,
-                visibility: 'visible',
-                duration: 0.7,
-                ease: 'power2.inOut',
-                onStart() { takeoffOverlay.classList.add('active'); },
-            }, '-=0.9')
-
-            // ── Hero fades out during flight ──
+            // ── Everything fades/wipes out as plane crosses ──
             .to(heroCenter, {
                 opacity: 0,
-                scale: 0.92,
-                filter: 'blur(6px)',
+                x: -80,               // pushed left by the sweep
                 duration: 0.5,
                 ease: 'power2.in',
-            }, '-=2.0')
+            }, '-=0.9')
 
             .to('.manifest', {
-                opacity: 0, x: 20,
+                opacity: 0,
+                x: -60,
                 duration: 0.4,
             }, '<')
 
             .to('.hero-bg', {
                 opacity: 0,
-                duration: 0.5,
+                duration: 0.4,
             }, '<+0.1')
 
-            // Hide plane
+            // Overlay fades in behind the sweep
+            .to(takeoffOverlay, {
+                opacity: 1,
+                visibility: 'visible',
+                duration: 0.5,
+                ease: 'power2.inOut',
+                onStart() { takeoffOverlay.classList.add('active'); },
+            }, '-=0.6')
+
+            // Hide plane after sweep
             .set(flyingPlane, { opacity: 0 })
 
-            // ── Phase 5: TOP GUN: MAVERICK fades in clean ──
+            // ── Phase 4: TOP GUN: MAVERICK fades in clean ──
             .fromTo(takeoffCard, {
                 opacity: 0,
-                y: 30,
+                y: 25,
             }, {
                 opacity: 1,
                 y: 0,
@@ -249,7 +194,7 @@ function initTakeoff() {
 initTakeoff();
 
 // ════════════════════════════════════════════════════════
-//   INTRO (no counter — starts with line)
+//   INTRO (no counter)
 // ════════════════════════════════════════════════════════
 
 const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
