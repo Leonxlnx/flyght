@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
    FLYGHT — Cinematic Hero
-   Arc title, video background, flight CTA
+   Custom title image, video background, flight CTA
    ════════════════════════════════════════════════════════ */
 
 *,
@@ -203,46 +203,28 @@ body {
     font-size: clamp(0.85rem, 1.4vw, 1.15rem);
     color: var(--text-dim);
     letter-spacing: 0.06em;
-    margin-bottom: clamp(0.6rem, 1.5vh, 1rem);
+    margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
     opacity: 0;
     transform: translateY(15px);
 }
 
-/* ── Title — Arc Path ─────────────────────────────────── */
+/* ── Title Image ──────────────────────────────────────── */
 
 .title-reveal {
     overflow: hidden;
-    margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
-    padding-top: clamp(1.5rem, 4vw, 4rem);
-    /* room for the arc to curve upward */
+    margin-bottom: clamp(0.6rem, 1.5vh, 1.2rem);
 }
 
-.hero-title {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 0.04em;
-    transform: translateY(130%);
+.hero-title-img {
+    display: block;
+    width: clamp(280px, 55vw, 750px);
+    height: auto;
+    object-fit: contain;
+    transform: translateY(110%);
     will-change: transform;
-}
-
-.t {
-    font-family: var(--f-title);
-    font-weight: 400;
-    font-size: clamp(4.5rem, 11vw, 10rem);
-    color: var(--text-bright);
-    display: inline-block;
-    line-height: 0.85;
-    letter-spacing: 0.06em;
-    text-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
-    /* translateY and rotate set by JS for arc positioning */
-    transform: translateY(var(--ty, 0)) rotate(var(--rot, 0deg));
-    transform-origin: center bottom;
-    transition: filter 0.3s ease;
-}
-
-.t:hover {
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.12));
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 4px 40px rgba(0, 0, 0, 0.4));
 }
 
 /* ── Divider ──────────────────────────────────────────── */
@@ -286,7 +268,7 @@ body {
     display: block;
 }
 
-/* ── CTA — Flight Runway ─────────────────────────────── */
+/* ── CTA ──────────────────────────────────────────────── */
 
 .cta-wrap {
     opacity: 0;
@@ -314,8 +296,6 @@ body {
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
 }
-
-
 
 .cta-btn:hover {
     background: rgba(255, 255, 255, 0.06);
@@ -444,8 +424,8 @@ body {
         max-width: 300px;
     }
 
-    .title-reveal {
-        padding-top: clamp(1rem, 3vw, 2rem);
+    .hero-title-img {
+        width: clamp(220px, 70vw, 400px);
     }
 }
 
@@ -462,8 +442,8 @@ body {
         font-size: 0.82rem;
     }
 
-    .title-reveal {
-        padding-top: 0.8rem;
+    .hero-title-img {
+        width: clamp(180px, 80vw, 300px);
     }
 
     .cta-btn {

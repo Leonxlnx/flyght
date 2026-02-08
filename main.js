@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Arc Title + Flight CTA
-   Letters same size, positioned along smooth curve
+   FLYGHT — Intro + Hero Animations
+   Custom title image with reveal mask
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -15,65 +15,12 @@ const introCounter = document.getElementById('introCounter');
 const noise = document.querySelector('.noise');
 
 const heroSub = document.getElementById('heroSub');
-const heroTitle = document.getElementById('heroTitle');
+const heroTitleImg = document.getElementById('heroTitleImg');
 const heroDivider = document.getElementById('heroDivider');
 const dividerLines = document.querySelectorAll('.divider-line');
 const heroDesc = document.getElementById('heroDesc');
 const ctaWrap = document.getElementById('ctaWrap');
 const manifestRows = document.querySelectorAll('.manifest-row');
-
-// ════════════════════════════════════════════════════════
-//   PARABOLIC ARC POSITIONING
-//
-//   All letters are the same SIZE.
-//   They are positioned vertically along a smooth parabola:
-//
-//     y(i) = amplitude × (t² - 1)
-//     where t = normalized position from -1 (left) to +1 (right)
-//
-//   This creates a ∪ curve: edges fly UP, center stays DOWN.
-//   Each letter is also slightly rotated following the
-//   curve's tangent: rot(i) = 2 × amplitude × t
-//   
-//   Result: the word curves up at both ends like wings ✈
-// ════════════════════════════════════════════════════════
-
-function applyArc() {
-    const letters = document.querySelectorAll('.t');
-    const n = letters.length;
-
-    // Responsive amplitude (how much the edges curve up)
-    const vw = window.innerWidth;
-    let amplitude;
-    if (vw > 1200) amplitude = -40;  // px upward at edges
-    else if (vw > 768) amplitude = -28;
-    else if (vw > 480) amplitude = -18;
-    else amplitude = -12;
-
-    // Max rotation at edges (degrees)
-    const maxRot = 6;
-
-    letters.forEach((letter, i) => {
-        // Normalize i to range [-1, 1]
-        const t = (2 * i / (n - 1)) - 1;  // F=-1, T=+1, center=0
-
-        // Parabola: y = amp × (t² - 1)
-        // At edges (t=±1): y = 0 (no offset — these are the highest)
-        // At center (t=0): y = -amp = +40px (pushed DOWN)
-        // So the edges are UP, center is DOWN → ∪ shape
-        const ty = amplitude * (t * t - 1);
-
-        // Tangent rotation: follows the slope of the curve
-        // slope = 2 × amp × t, convert to degrees
-        const rot = maxRot * t;
-
-        letter.style.setProperty('--ty', `${ty}px`);
-        letter.style.setProperty('--rot', `${rot}deg`);
-    });
-}
-
-applyArc();
-window.addEventListener('resize', () => requestAnimationFrame(applyArc));
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
@@ -151,8 +98,8 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power3.out',
     }, '-=0.9')
 
-    // Title — slides up as one connected word
-    .to(heroTitle, {
+    // Title image — slides up from mask
+    .to(heroTitleImg, {
         y: 0,
         duration: 1.1,
         ease: 'power4.out',
