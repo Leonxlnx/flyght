@@ -208,11 +208,10 @@ tl.set(introLine, { opacity: 1 }, '+=0.5')
         ease: 'power4.inOut',
     })
 
-    // Directly split — no brightening
-    .set(introLine, { opacity: 0 })
-
+    // Split — line fades out DURING the split (no dark gap)
     .to(introTop, { yPercent: -100, duration: 1.4, ease: 'power3.inOut' })
     .to(introBottom, { yPercent: 100, duration: 1.4, ease: 'power3.inOut' }, '<')
+    .to(introLine, { opacity: 0, duration: 0.4, ease: 'power2.in' }, '<')
 
     .to(noise, { opacity: 0.02, duration: 1 }, '-=0.8')
     .set(intro, { display: 'none' })
