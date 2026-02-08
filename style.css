@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Cinematic Hero with Video Background
-   Smooth parabolic title, responsive, clean
+   FLYGHT — Cinematic Hero
+   Arc title, video background, flight CTA
    ════════════════════════════════════════════════════════ */
 
 *,
@@ -208,40 +208,41 @@ body {
     transform: translateY(15px);
 }
 
-/* ── Title — Parabolic Arc ────────────────────────────── */
+/* ── Title — Arc Path ─────────────────────────────────── */
 
 .title-reveal {
     overflow: hidden;
     margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
+    padding-top: clamp(1.5rem, 4vw, 4rem);
+    /* room for the arc to curve upward */
 }
 
 .hero-title {
     display: flex;
     align-items: flex-end;
-    /* flat baseline, letters grow UPWARD */
     justify-content: center;
-    gap: 0;
-    line-height: 1;
-    transform: translateY(110%);
+    gap: 0.04em;
+    transform: translateY(130%);
     will-change: transform;
 }
 
 .t {
     font-family: var(--f-title);
     font-weight: 400;
+    font-size: clamp(4.5rem, 11vw, 10rem);
     color: var(--text-bright);
     display: inline-block;
-    line-height: 0.82;
+    line-height: 0.85;
+    letter-spacing: 0.06em;
     text-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
-    /* Size set via CSS custom property --s from JS */
-    font-size: var(--s);
-    letter-spacing: 0.03em;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.3s ease;
+    /* translateY and rotate set by JS for arc positioning */
+    transform: translateY(var(--ty, 0)) rotate(var(--rot, 0deg));
+    transform-origin: center bottom;
+    transition: filter 0.3s ease;
 }
 
 .t:hover {
-    transform: translateY(-4px);
-    text-shadow: 0 0 40px rgba(255, 255, 255, 0.08), 0 4px 60px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.12));
 }
 
 /* ── Divider ──────────────────────────────────────────── */
@@ -285,53 +286,67 @@ body {
     display: block;
 }
 
-/* ── CTA ──────────────────────────────────────────────── */
+/* ── CTA — Flight Runway ─────────────────────────────── */
 
 .cta-wrap {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px);
 }
 
 .cta-btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.85rem 2.2rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--text-muted);
-    border-radius: 50px;
-    color: var(--text-dim);
-    font-family: var(--f-mono);
-    font-size: 0.52rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
+    gap: 1rem;
+    padding: 1rem 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 60px;
+    color: var(--text);
+    font-family: var(--f-serif);
+    font-style: italic;
+    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.cta-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 50%;
+    left: 1.8rem;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--text-dim) 0%, transparent 100%);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(50%);
+}
+
+.cta-btn:hover::before {
+    width: calc(100% - 4rem);
 }
 
 .cta-btn:hover {
-    color: var(--text-bright);
-    border-color: var(--text-dim);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.18);
+    gap: 1.4rem;
+    letter-spacing: 0.14em;
+    padding: 1rem 3rem;
 }
 
-.cta-arrow {
-    font-size: 0.65rem;
-    animation: arrowBob 2.5s ease-in-out infinite;
+.cta-icon {
+    font-size: 1rem;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
 }
 
-@keyframes arrowBob {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(3px);
-    }
+.cta-btn:hover .cta-icon {
+    transform: translateX(4px) translateY(-2px) rotate(-30deg);
 }
 
 /* ── Film Manifest ────────────────────────────────────── */
@@ -443,8 +458,8 @@ body {
         max-width: 300px;
     }
 
-    .eyebrow {
-        gap: 0.6rem;
+    .title-reveal {
+        padding-top: clamp(1rem, 3vw, 2rem);
     }
 }
 
@@ -459,5 +474,14 @@ body {
 
     .hero-sub {
         font-size: 0.82rem;
+    }
+
+    .title-reveal {
+        padding-top: 0.8rem;
+    }
+
+    .cta-btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 0.85rem;
     }
 }

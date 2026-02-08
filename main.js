@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Smooth Parabolic Title + Intro + Video BG
+   FLYGHT — Arc Title + Flight CTA
+   Letters same size, positioned along smooth curve
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -22,59 +23,57 @@ const ctaWrap = document.getElementById('ctaWrap');
 const manifestRows = document.querySelectorAll('.manifest-row');
 
 // ════════════════════════════════════════════════════════
-//   PARABOLIC TITLE SIZING
+//   PARABOLIC ARC POSITIONING
+//
+//   All letters are the same SIZE.
+//   They are positioned vertically along a smooth parabola:
+//
+//     y(i) = amplitude × (t² - 1)
+//     where t = normalized position from -1 (left) to +1 (right)
+//
+//   This creates a ∪ curve: edges fly UP, center stays DOWN.
+//   Each letter is also slightly rotated following the
+//   curve's tangent: rot(i) = 2 × amplitude × t
 //   
-//   Mathematical parabola: size(i) = minSize + (maxSize - minSize) × t²
-//   where t = normalized distance from center (0 at center, 1 at edges)
-//   
-//   Creates a smooth ∪ curve:
-//   Bottom = flat baseline (flex-end)
-//   Top = parabolic arc (bigger at edges, smaller in center)
+//   Result: the word curves up at both ends like wings ✈
 // ════════════════════════════════════════════════════════
 
-function applyParabolicSizes() {
+function applyArc() {
     const letters = document.querySelectorAll('.t');
-    const n = letters.length;                // 6
-    const center = (n - 1) / 2;             // 2.5
-    const maxDist = center;                  // 2.5
+    const n = letters.length;
 
-    // Responsive max/min sizes based on viewport width
+    // Responsive amplitude (how much the edges curve up)
     const vw = window.innerWidth;
-    let maxSize, minSize;
+    let amplitude;
+    if (vw > 1200) amplitude = -40;  // px upward at edges
+    else if (vw > 768) amplitude = -28;
+    else if (vw > 480) amplitude = -18;
+    else amplitude = -12;
 
-    if (vw > 1200) {
-        maxSize = 15;    // rem — F and T
-        minSize = 6;     // rem — Y and G
-    } else if (vw > 768) {
-        maxSize = 11;
-        minSize = 4.5;
-    } else if (vw > 480) {
-        maxSize = 8;
-        minSize = 3.2;
-    } else {
-        maxSize = 5.5;
-        minSize = 2.2;
-    }
+    // Max rotation at edges (degrees)
+    const maxRot = 6;
 
     letters.forEach((letter, i) => {
-        // Distance from center, normalized to 0-1
-        const dist = Math.abs(i - center);
-        const t = dist / maxDist;
+        // Normalize i to range [-1, 1]
+        const t = (2 * i / (n - 1)) - 1;  // F=-1, T=+1, center=0
 
-        // Smooth parabola: t² gives the curve (quadratic easing)
-        const sizeFactor = t * t;
-        const size = minSize + (maxSize - minSize) * sizeFactor;
+        // Parabola: y = amp × (t² - 1)
+        // At edges (t=±1): y = 0 (no offset — these are the highest)
+        // At center (t=0): y = -amp = +40px (pushed DOWN)
+        // So the edges are UP, center is DOWN → ∪ shape
+        const ty = amplitude * (t * t - 1);
 
-        // Set CSS custom property
-        letter.style.setProperty('--s', `${size}rem`);
+        // Tangent rotation: follows the slope of the curve
+        // slope = 2 × amp × t, convert to degrees
+        const rot = maxRot * t;
+
+        letter.style.setProperty('--ty', `${ty}px`);
+        letter.style.setProperty('--rot', `${rot}deg`);
     });
 }
 
-// Apply on load + resize
-applyParabolicSizes();
-window.addEventListener('resize', () => {
-    requestAnimationFrame(applyParabolicSizes);
-});
+applyArc();
+window.addEventListener('resize', () => requestAnimationFrame(applyArc));
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
@@ -152,7 +151,7 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
         ease: 'power3.out',
     }, '-=0.9')
 
-    // Title — whole block slides up from mask
+    // Title — slides up as one connected word
     .to(heroTitle, {
         y: 0,
         duration: 1.1,
