@@ -1,5 +1,6 @@
 /* ════════════════════════════════════════════════════════
    FLYGHT — Intro + Hero Animations
+   Clean title reveal (no letter-by-letter)
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -14,13 +15,12 @@ const introCounter = document.getElementById('introCounter');
 const noise = document.querySelector('.noise');
 
 const heroSub = document.getElementById('heroSub');
-const titleChars = document.querySelectorAll('.title-char');
+const heroTitle = document.querySelector('.hero-title');
 const heroDivider = document.getElementById('heroDivider');
 const dividerLines = document.querySelectorAll('.divider-line');
 const heroDesc = document.getElementById('heroDesc');
-const manifestRows = document.querySelectorAll('.manifest-row');
 const ctaWrap = document.getElementById('ctaWrap');
-const hudItems = document.querySelectorAll('.hud-item');
+const manifestRows = document.querySelectorAll('.manifest-row');
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
@@ -76,7 +76,6 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
     .to(introTop, { yPercent: -100, duration: 1.4, ease: 'power3.inOut' })
     .to(introBottom, { yPercent: 100, duration: 1.4, ease: 'power3.inOut' }, '<')
 
-    // Fade edge glow
     .to(introTop, {
         boxShadow: '0 3px 35px 4px transparent, 0 1px 6px transparent',
         duration: 0.8,
@@ -95,77 +94,50 @@ tl.to(introCounter, { opacity: 1, duration: 0.4 })
     .to(heroSub, {
         opacity: 1,
         y: 0,
-        duration: 0.7,
+        duration: 0.8,
         ease: 'power3.out',
     }, '-=0.9')
 
-    // Title letters
-    .to(titleChars, {
+    // Title — clean single reveal from mask
+    .to(heroTitle, {
         y: 0,
-        duration: 1,
-        stagger: 0.06,
+        duration: 1.1,
         ease: 'power4.out',
-    }, '-=0.4')
+    }, '-=0.5')
 
     // Divider
-    .to(heroDivider, { opacity: 1, duration: 0.5 }, '-=0.4')
-    .to(dividerLines, { width: 50, duration: 0.6, ease: 'power2.out' }, '<')
+    .to(heroDivider, { opacity: 1, duration: 0.5 }, '-=0.5')
+    .to(dividerLines, { width: 50, duration: 0.7, ease: 'power2.out' }, '<')
 
     // Description
     .to(heroDesc, {
         opacity: 1,
         y: 0,
-        duration: 0.7,
+        duration: 0.8,
         ease: 'power3.out',
     }, '-=0.3')
 
-    // Manifest rows
+    // CTA
+    .to(ctaWrap, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+    }, '-=0.3')
+
+    // Manifest rows (from right)
     .to(manifestRows, {
         opacity: 1,
         duration: 0.4,
         stagger: 0.04,
-    }, '-=0.3')
+    }, '-=0.4')
 
     .from(manifestRows, {
         x: 15,
         duration: 0.5,
         stagger: 0.04,
         ease: 'power2.out',
-    }, '<')
-
-    // HUD items
-    .to(hudItems, {
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.08,
-    }, '-=0.4')
-
-    // CTA
-    .to(ctaWrap, {
-        opacity: 1,
-        duration: 0.5,
-    }, '-=0.3')
-
-    .from(ctaWrap, {
-        y: 8,
-        duration: 0.5,
-        ease: 'power2.out',
     }, '<');
-
-// ── Title Hover ─────────────────────────────────────────
-
-titleChars.forEach((c, i) => {
-    c.addEventListener('mouseenter', () => {
-        gsap.to(c, { y: -6, duration: 0.3, ease: 'power3.out' });
-        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: -2, duration: 0.3, ease: 'power3.out' });
-        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: -2, duration: 0.3, ease: 'power3.out' });
-    });
-    c.addEventListener('mouseleave', () => {
-        gsap.to(c, { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
-        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
-        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
-    });
-});
 
 // ── Background Parallax ─────────────────────────────────
 
