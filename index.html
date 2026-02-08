@@ -19,12 +19,11 @@
 
 <body>
 
-    <!-- ═══════ INTRO ═══════ -->
+    <!-- ═══════ INTRO (no counter) ═══════ -->
     <div class="intro" id="intro">
         <div class="intro-bar intro-top" id="introTop"></div>
         <div class="intro-bar intro-bottom" id="introBottom"></div>
         <div class="intro-line" id="introLine"></div>
-        <div class="intro-counter" id="introCounter">00</div>
     </div>
 
     <!-- ═══════ NOISE ═══════ -->
@@ -42,11 +41,10 @@
         </div>
 
         <!-- Center Content -->
-        <div class="hero-center">
+        <div class="hero-center" id="heroCenter">
 
             <p class="hero-sub" id="heroSub">Where cinema takes flight</p>
 
-            <!-- Custom title image with reveal mask -->
             <div class="title-reveal" id="titleReveal">
                 <img src="/flyght-title.png" alt="FLYGHT" class="hero-title-img" id="heroTitleImg" draggable="false" />
             </div>
@@ -63,9 +61,9 @@
             </p>
 
             <div class="cta-wrap" id="ctaWrap">
-                <button class="cta-btn">
+                <button class="cta-btn" id="ctaBtn">
                     <span class="cta-text">Take off</span>
-                    <span class="cta-icon">✈</span>
+                    <span class="cta-icon" id="ctaIcon">✈</span>
                 </button>
             </div>
 
@@ -107,9 +105,8 @@
 
     </section>
 
-    <!-- ═══════ TAKEOFF TRANSITION ═══════ -->
+    <!-- ═══════ TAKEOFF OVERLAY ═══════ -->
     <div class="takeoff-overlay" id="takeoffOverlay">
-        <div class="takeoff-plane" id="takeoffPlane">✈</div>
         <div class="takeoff-card" id="takeoffCard">
             <span class="takeoff-num">01</span>
             <h2 class="takeoff-film">Top Gun: Maverick</h2>
@@ -117,6 +114,9 @@
             <div class="takeoff-tagline">Feel the need for speed.</div>
         </div>
     </div>
+
+    <!-- Flying plane (lives outside everything so it can go anywhere) -->
+    <div class="flying-plane" id="flyingPlane" aria-hidden="true">✈</div>
 
     <script type="module" src="/main.js"></script>
 </body>
