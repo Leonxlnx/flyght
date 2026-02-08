@@ -1,425 +1,295 @@
-/* ════════════════════════════════════════════
-   FLYGHT — Cinematic Hero Experience
-   GSAP Animation + Atmospheric Canvas
-   ════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   FLYGHT — Cinematic Intro & Hero Animations
+   ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
 
-// ── Elements ────────────────────────────────
+// ── Refs ────────────────────────────────────────────────
 
 const cursor = document.getElementById('cursor');
-const mouseGlow = document.getElementById('mouseGlow');
-const introFlare = document.getElementById('introFlare');
+const intro = document.getElementById('intro');
+const introTop = document.getElementById('introTop');
+const introBottom = document.getElementById('introBottom');
+const introLine = document.getElementById('introLine');
 const introCounter = document.getElementById('introCounter');
-const counterNum = introCounter.querySelector('.intro-counter-num');
-const grain = document.querySelector('.grain');
+
+const noise = document.querySelector('.noise');
 const vignette = document.querySelector('.vignette');
-const canvas = document.getElementById('atmosphere');
-const ctx = canvas.getContext('2d');
+const gradientBg = document.querySelector('.gradient-bg');
 
-const heroEyebrow = document.getElementById('heroEyebrow');
-const heroTitle = document.getElementById('heroTitle');
-const heroTagline = document.getElementById('heroTagline');
-const heroFilms = document.getElementById('heroFilms');
-const heroCta = document.getElementById('heroCta');
-const heroBottom = document.getElementById('heroBottom');
+const eyebrow = document.getElementById('eyebrow');
+const eyebrowLineL = document.getElementById('eyebrowLineL');
+const eyebrowLineR = document.getElementById('eyebrowLineR');
+const titleChars = document.querySelectorAll('.title-char');
+const titleAccent = document.getElementById('titleAccent');
+const taglineInners = document.querySelectorAll('.tagline-inner');
+const filmIndex = document.getElementById('filmIndex');
+const filmEntries = document.querySelectorAll('.film-entry');
+const cta = document.getElementById('cta');
+const markers = document.querySelectorAll('.marker');
 
-const sideMarkers = document.querySelectorAll('.side-marker');
-const fragments = document.querySelectorAll('.frag');
-const flares = document.querySelectorAll('.flare');
-const titleLetters = document.querySelectorAll('.title-letter');
+// ── Mouse ───────────────────────────────────────────────
 
-// ── Mouse State ─────────────────────────────
+let mx = window.innerWidth / 2;
+let my = window.innerHeight / 2;
+let cx = mx, cy = my;
 
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let cursorX = mouseX;
-let cursorY = mouseY;
-
-window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+document.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
 });
 
-function updateCursor() {
-    // Smooth follow for ring
-    cursorX += (mouseX - cursorX) * 0.12;
-    cursorY += (mouseY - cursorY) * 0.12;
+// Cursor hover detection
+const hoverables = document.querySelectorAll('.cta-btn, .film-entry, .title-char');
+hoverables.forEach((el) => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+});
 
-    // Dot follows instantly
-    gsap.set(cursor, {
-        x: mouseX,
-        y: mouseY,
-    });
+function animateCursor() {
+    cx += (mx - cx) * 0.1;
+    cy += (my - cy) * 0.1;
 
-    // Ring follows smoothly (offset applied in CSS)
-    const ring = cursor.querySelector('.cursor-ring');
-    gsap.set(ring, {
-        x: cursorX - mouseX,
-        y: cursorY - mouseY,
-    });
+    cursor.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
 
-    // Mouse glow
-    gsap.set(mouseGlow, {
-        x: cursorX,
-        y: cursorY,
-    });
+    const ring = cursor.querySelector('.cursor-circle');
+    ring.style.transform = `translate3d(${cx - mx}px, ${cy - my}px, 0)`;
 
-    requestAnimationFrame(updateCursor);
+    requestAnimationFrame(animateCursor);
 }
-updateCursor();
+animateCursor();
 
-// ── Atmospheric Particles ───────────────────
+// ── Title Letter Interactions ───────────────────────────
 
-let particles = [];
-let canvasW, canvasH;
-const PARTICLE_COUNT = 80;
-
-function resizeCanvas() {
-    canvasW = canvas.width = window.innerWidth;
-    canvasH = canvas.height = window.innerHeight;
-}
-
-function createParticle(full) {
-    return {
-        x: Math.random() * canvasW,
-        y: full ? Math.random() * canvasH : -10,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: Math.random() * 0.2 + 0.05,
-        size: Math.random() * 1.8 + 0.2,
-        opacity: Math.random() * 0.3 + 0.05,
-        life: full ? Math.random() : 0,
-        maxLife: Math.random() * 0.5 + 0.5,
-        hue: Math.random() > 0.7 ? 35 : 0,
-        sat: Math.random() > 0.7 ? 20 : 0,
-    };
-}
-
-function initParticles() {
-    resizeCanvas();
-    particles = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(createParticle(true));
-    }
-}
-
-function drawParticles() {
-    ctx.clearRect(0, 0, canvasW, canvasH);
-
-    // Subtle atmospheric haze at bottom
-    const hazeGradient = ctx.createLinearGradient(0, canvasH * 0.7, 0, canvasH);
-    hazeGradient.addColorStop(0, 'transparent');
-    hazeGradient.addColorStop(1, 'rgba(176, 141, 87, 0.015)');
-    ctx.fillStyle = hazeGradient;
-    ctx.fillRect(0, 0, canvasW, canvasH);
-
-    for (const p of particles) {
-        // Mouse influence
-        const dx = mouseX - p.x;
-        const dy = mouseY - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-            const force = (200 - dist) / 200 * 0.01;
-            p.vx -= dx * force * 0.01;
-            p.vy -= dy * force * 0.01;
-        }
-
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life += 0.001;
-
-        // Fade in/out based on life
-        let alpha = p.opacity;
-        if (p.life < 0.1) alpha *= p.life / 0.1;
-        if (p.life > p.maxLife - 0.1) alpha *= (p.maxLife - p.life) / 0.1;
-
-        if (p.life >= p.maxLife || p.y > canvasH + 10 || p.x < -10 || p.x > canvasW + 10) {
-            Object.assign(p, createParticle(false));
-            p.x = Math.random() * canvasW;
-            continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-
-        if (p.sat > 0) {
-            ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, 75%, ${alpha})`;
-        } else {
-            ctx.fillStyle = `rgba(232, 228, 220, ${alpha})`;
-        }
-        ctx.fill();
-
-        // Glow for larger particles
-        if (p.size > 1.2) {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
-            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
-            glow.addColorStop(0, `rgba(176, 141, 87, ${alpha * 0.12})`);
-            glow.addColorStop(1, 'transparent');
-            ctx.fillStyle = glow;
-            ctx.fill();
-        }
-    }
-
-    requestAnimationFrame(drawParticles);
-}
-
-window.addEventListener('resize', resizeCanvas);
-initParticles();
-drawParticles();
-
-// ── Fragment Parallax ───────────────────────
-
-function updateFragments() {
-    fragments.forEach((frag) => {
-        const speed = parseFloat(frag.style.getPropertyValue('--s')) || 0.5;
-        const dx = (mouseX - window.innerWidth / 2) * speed * 0.015;
-        const dy = (mouseY - window.innerHeight / 2) * speed * 0.015;
-        gsap.to(frag, {
-            x: dx,
-            y: dy,
-            duration: 2,
-            ease: 'power2.out',
-        });
-    });
-    requestAnimationFrame(updateFragments);
-}
-updateFragments();
-
-// ── Title Letter Hover Shimmer ──────────────
-
-titleLetters.forEach((letter) => {
-    letter.addEventListener('mouseenter', () => {
-        gsap.to(letter, {
+titleChars.forEach((char, i) => {
+    char.addEventListener('mouseenter', () => {
+        gsap.to(char, {
+            y: -10,
             backgroundPosition: '0% 100%',
-            duration: 0.6,
-            ease: 'power2.inOut',
-        });
-        gsap.to(letter, {
-            y: -8,
             duration: 0.4,
             ease: 'power3.out',
         });
+
+        // Subtly move neighboring letters
+        const prev = titleChars[i - 1];
+        const next = titleChars[i + 1];
+        if (prev) gsap.to(prev, { y: -4, duration: 0.4, ease: 'power3.out' });
+        if (next) gsap.to(next, { y: -4, duration: 0.4, ease: 'power3.out' });
     });
 
-    letter.addEventListener('mouseleave', () => {
-        gsap.to(letter, {
-            backgroundPosition: '0% 0%',
-            duration: 0.8,
-            ease: 'power2.inOut',
-        });
-        gsap.to(letter, {
+    char.addEventListener('mouseleave', () => {
+        gsap.to(char, {
             y: 0,
-            duration: 0.6,
-            ease: 'elastic.out(1, 0.5)',
+            backgroundPosition: '0% 0%',
+            duration: 0.7,
+            ease: 'elastic.out(1, 0.4)',
         });
+
+        const prev = titleChars[i - 1];
+        const next = titleChars[i + 1];
+        if (prev) gsap.to(prev, { y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+        if (next) gsap.to(next, { y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
     });
 });
 
-// ════════════════════════════════════════════
-//   MASTER TIMELINE — The Cinematic Intro
-// ════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+//   MASTER TIMELINE
+// ════════════════════════════════════════════════════════
 
-const master = gsap.timeline({
-    defaults: { ease: 'power3.inOut' },
-});
+const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-// Phase 1: Counter counts up
-master
-    .set(introCounter, { opacity: 1 })
-    .to(counterNum, {
+// ── Phase 1: Counter ────────────────────────────────────
+// "00" appears, counts to "100"
+
+tl.to(introCounter, {
+    opacity: 1,
+    duration: 0.5,
+    ease: 'power2.out',
+})
+    .to(introCounter, {
         innerText: 100,
-        duration: 2,
+        duration: 2.2,
+        ease: 'power2.inOut',
         snap: { innerText: 1 },
-        ease: 'power2.in',
-        onUpdate: function () {
-            const val = Math.round(gsap.getProperty(counterNum, 'innerText'));
-            counterNum.textContent = String(val).padStart(2, '0');
+        onUpdate() {
+            const v = Math.round(parseFloat(introCounter.innerText));
+            introCounter.innerText = String(v).padStart(3, '0');
         },
     })
 
-    // Phase 2: Flare appears and widens
-    .to(introFlare, {
-        opacity: 1,
-        width: '70%',
-        duration: 0.8,
-        ease: 'power4.out',
-    }, '-=0.5')
+    // ── Phase 2: Counter fades, Line appears & expands ──────
+    // A thin teal line at center grows from 0 to full viewport width
 
     .to(introCounter, {
         opacity: 0,
-        duration: 0.3,
-    }, '-=0.3')
+        duration: 0.4,
+        ease: 'power2.in',
+    }, '-=0.2')
 
-    // Phase 3: Flare expands full + bars recede
-    .to(introFlare, {
-        width: '150%',
-        height: '6px',
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.in',
+    .to(introLine, {
+        width: '100vw',
+        duration: 1,
+        ease: 'power4.inOut',
+    }, '-=0.1')
+
+    // ── Phase 3: Bars split open ────────────────────────────
+    // The line stays, top bar slides up, bottom bar slides down
+
+    .to(introLine, {
+        height: '3px',
+        boxShadow: '0 0 40px 8px rgba(122, 179, 176, 0.3), 0 0 100px 20px rgba(122, 179, 176, 0.08)',
+        duration: 0.3,
+        ease: 'power2.out',
     })
 
-    .to('.intro-bar--top', {
-        scaleY: 0,
-        duration: 1.4,
+    .to(introTop, {
+        yPercent: -100,
+        duration: 1.2,
         ease: 'power4.inOut',
-    }, '-=0.8')
+    }, '-=0.1')
 
-    .to('.intro-bar--bottom', {
-        scaleY: 0,
-        duration: 1.4,
+    .to(introBottom, {
+        yPercent: 100,
+        duration: 1.2,
         ease: 'power4.inOut',
     }, '<')
 
-    // Phase 4: Environment fades in
-    .to(grain, {
-        opacity: 0.035,
-        duration: 1.5,
-    }, '-=0.8')
+    // Line fades as bars separate
+    .to(introLine, {
+        opacity: 0,
+        height: '1px',
+        duration: 0.8,
+        ease: 'power2.in',
+    }, '<+0.3')
+
+    // ── Phase 4: Environment reveals ────────────────────────
+
+    .to(gradientBg, {
+        opacity: 1,
+        duration: 2,
+        ease: 'power1.out',
+    }, '-=0.6')
 
     .to(vignette, {
         opacity: 1,
         duration: 1.5,
     }, '<')
 
-    .to(canvas, {
-        opacity: 1,
-        duration: 2,
-    }, '<')
-
-    .to(mouseGlow, {
-        opacity: 1,
-        duration: 1,
-    }, '<+0.5')
-
-    // Phase 5: Fragments drift in
-    .to(fragments, {
-        opacity: 1,
-        duration: 2,
-        stagger: 0.08,
-    }, '<')
-
-    .to(flares, {
-        opacity: 1,
-        duration: 2,
-        stagger: 0.2,
+    .to(noise, {
+        opacity: 0.025,
+        duration: 1.5,
     }, '<+0.3')
 
-    // Phase 6: Hero content reveals
-    .to(heroEyebrow, {
-        opacity: 1,
-        duration: 1,
-    }, '-=1.2')
+    // Hide intro layer
+    .set(intro, { display: 'none' })
 
-    // Letters slide up from below
-    .to(titleLetters, {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.07,
-        ease: 'power4.out',
-    }, '-=0.8')
+    // ── Phase 5: Hero Content ───────────────────────────────
 
-    .to(heroTagline, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-    }, '-=0.5')
-
-    .from(heroTagline, {
-        y: 20,
-        duration: 1,
-        ease: 'power3.out',
-    }, '<')
-
-    .to(heroFilms, {
+    // Eyebrow
+    .to(eyebrow, {
         opacity: 1,
         duration: 0.8,
+    }, '-=1')
+
+    .to([eyebrowLineL, eyebrowLineR], {
+        width: 50,
+        duration: 0.8,
+        ease: 'power2.out',
+    }, '<')
+
+    // Title letters — clip-masked slide up
+    .to(titleChars, {
+        y: 0,
+        duration: 1,
+        stagger: 0.06,
+        ease: 'power4.out',
     }, '-=0.4')
 
-    .from('.hero-film', {
-        y: 12,
-        opacity: 0,
+    // Title accent line
+    .to(titleAccent, {
+        opacity: 1,
+        width: '280px',
+        duration: 0.8,
+        ease: 'power2.out',
+    }, '-=0.3')
+
+    // Tagline lines
+    .to(taglineInners, {
+        y: 0,
+        duration: 0.9,
+        stagger: 0.1,
+        ease: 'power4.out',
+    }, '-=0.4')
+
+    // Film index
+    .to(filmIndex, {
+        opacity: 1,
         duration: 0.6,
-        stagger: 0.05,
-        ease: 'power2.out',
-    }, '<')
+    }, '-=0.3')
 
-    .to(heroCta, {
-        opacity: 1,
-        duration: 0.8,
-    }, '-=0.2')
-
-    .from(heroCta, {
+    .from(filmEntries, {
         y: 15,
-        duration: 0.8,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.04,
         ease: 'power2.out',
     }, '<')
 
-    // Phase 7: Side elements
-    .to(sideMarkers, {
+    // CTA
+    .to(cta, {
         opacity: 1,
-        duration: 1,
-        stagger: 0.1,
-    }, '-=0.6')
+        duration: 0.6,
+    }, '-=0.1')
 
-    .to(heroBottom, {
-        opacity: 1,
-        duration: 1,
+    .from(cta, {
+        y: 12,
+        duration: 0.6,
+        ease: 'power2.out',
     }, '<')
 
-    // Phase 8: Subtle post-reveal shimmer on title
-    .to(titleLetters, {
-        backgroundPosition: '0% 50%',
-        duration: 3,
-        stagger: 0.1,
-        ease: 'power1.inOut',
-    }, '-=1');
+    // Corner markers
+    .to(markers, {
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.05,
+    }, '-=0.4')
 
-// ── Subtle Continuous Animations ────────────
+    // ── Phase 6: Post-reveal shimmer ────────────────────────
+    // A subtle gradient sweep across the title
 
-// Flares gently pulse
-gsap.to('.flare--1', {
-    opacity: 0.6,
-    x: 30,
-    duration: 8,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1,
-    delay: 6,
-});
-
-gsap.to('.flare--2', {
-    opacity: 0.5,
-    x: -20,
-    duration: 10,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1,
-    delay: 7,
-});
-
-gsap.to('.flare--3', {
-    scale: 1.5,
-    opacity: 0.8,
-    duration: 6,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: -1,
-    delay: 5,
-});
-
-// Fragments slowly drift
-fragments.forEach((frag, i) => {
-    gsap.to(frag, {
-        y: `+=${10 + Math.random() * 20}`,
-        x: `+=${(Math.random() - 0.5) * 15}`,
-        duration: 15 + Math.random() * 10,
+    .to(titleChars, {
+        backgroundPosition: '0% 40%',
+        duration: 2.5,
+        stagger: 0.08,
         ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        delay: i * 0.5,
+    }, '-=0.5')
+
+    .to(titleChars, {
+        backgroundPosition: '0% 0%',
+        duration: 2,
+        stagger: 0.08,
+        ease: 'sine.inOut',
     });
-});
+
+// ── Ambient: Gradient orbs parallax with mouse ──────────
+
+function animateOrbs() {
+    const nx = (mx / window.innerWidth - 0.5) * 2;  // -1 to 1
+    const ny = (my / window.innerHeight - 0.5) * 2;
+
+    const orbs = document.querySelectorAll('.gradient-orb');
+    const speeds = [12, 8, 15];
+
+    orbs.forEach((orb, i) => {
+        gsap.to(orb, {
+            x: nx * speeds[i],
+            y: ny * speeds[i],
+            duration: 3,
+            ease: 'power2.out',
+            overwrite: 'auto',
+        });
+    });
+
+    requestAnimationFrame(animateOrbs);
+}
+animateOrbs();

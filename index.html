@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap"
         rel="stylesheet" />
 
     <link rel="stylesheet" href="/style.css" />
@@ -19,117 +19,105 @@
 
 <body>
 
-    <!-- ========== CUSTOM CURSOR ========== -->
+    <!-- ═══════ CURSOR ═══════ -->
     <div class="cursor" id="cursor">
         <div class="cursor-dot"></div>
-        <div class="cursor-ring"></div>
+        <div class="cursor-circle"></div>
     </div>
 
-    <!-- ========== CINEMATIC INTRO ========== -->
+    <!-- ═══════ INTRO SEQUENCE ═══════ -->
     <div class="intro" id="intro">
-        <div class="intro-bar intro-bar--top"></div>
-        <div class="intro-bar intro-bar--bottom"></div>
-        <div class="intro-flare" id="introFlare"></div>
-        <div class="intro-counter" id="introCounter">
-            <span class="intro-counter-num">00</span>
-        </div>
+        <div class="intro-bar intro-top" id="introTop"></div>
+        <div class="intro-bar intro-bottom" id="introBottom"></div>
+        <div class="intro-line" id="introLine"></div>
+        <div class="intro-counter" id="introCounter">00</div>
     </div>
 
-    <!-- ========== OVERLAYS ========== -->
-    <div class="grain"></div>
-    <div class="vignette"></div>
-    <div class="mouse-glow" id="mouseGlow"></div>
+    <!-- ═══════ NOISE + VIGNETTE ═══════ -->
+    <div class="noise" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
 
-    <!-- ========== ATMOSPHERIC CANVAS ========== -->
-    <canvas id="atmosphere"></canvas>
-
-    <!-- ========== FLOATING FRAGMENTS ========== -->
-    <div class="fragments" id="fragments" aria-hidden="true">
-        <span class="frag" style="--x: 8%; --y: 15%; --s: 0.7; --r: -12deg">MAVERICK</span>
-        <span class="frag" style="--x: 85%; --y: 22%; --s: 0.5; --r: 8deg">2022</span>
-        <span class="frag" style="--x: 12%; --y: 72%; --s: 0.6; --r: 5deg">NOLAN</span>
-        <span class="frag" style="--x: 78%; --y: 78%; --s: 0.55; --r: -7deg">INTERSTELLAR</span>
-        <span class="frag" style="--x: 92%; --y: 50%; --s: 0.45; --r: 90deg">GRAVITY</span>
-        <span class="frag" style="--x: 5%; --y: 45%; --s: 0.5; --r: -90deg">DUNKIRK</span>
-        <span class="frag" style="--x: 55%; --y: 8%; --s: 0.4; --r: 3deg">2013</span>
-        <span class="frag" style="--x: 40%; --y: 88%; --s: 0.5; --r: -4deg">TOOTHLESS</span>
-        <span class="frag" style="--x: 70%; --y: 12%; --s: 0.35; --r: 15deg">SCORSESE</span>
-        <span class="frag" style="--x: 25%; --y: 35%; --s: 0.4; --r: -20deg">CUARÓN</span>
+    <!-- ═══════ LIVING GRADIENT BG ═══════ -->
+    <div class="gradient-bg" aria-hidden="true">
+        <div class="gradient-orb gradient-orb--1"></div>
+        <div class="gradient-orb gradient-orb--2"></div>
+        <div class="gradient-orb gradient-orb--3"></div>
     </div>
 
-    <!-- ========== LENS FLARES ========== -->
-    <div class="flare flare--1"></div>
-    <div class="flare flare--2"></div>
-    <div class="flare flare--3"></div>
-
-    <!-- ========== HERO ========== -->
+    <!-- ═══════ HERO ═══════ -->
     <section class="hero" id="hero">
-        <div class="hero-content">
 
-            <div class="hero-eyebrow" id="heroEyebrow">
-                <span class="eyebrow-line"></span>
-                <span class="eyebrow-text">The Greatest Flights in Cinema</span>
-                <span class="eyebrow-line"></span>
+        <!-- Eyebrow -->
+        <div class="eyebrow" id="eyebrow">
+            <div class="eyebrow-line" id="eyebrowLineL"></div>
+            <span class="eyebrow-text">The Greatest Flights in Cinema</span>
+            <div class="eyebrow-line" id="eyebrowLineR"></div>
+        </div>
+
+        <!-- Title -->
+        <h1 class="title" id="title">
+            <span class="title-mask"><span class="title-char" data-char="F">F</span></span>
+            <span class="title-mask"><span class="title-char" data-char="L">L</span></span>
+            <span class="title-mask"><span class="title-char" data-char="Y">Y</span></span>
+            <span class="title-mask"><span class="title-char" data-char="G">G</span></span>
+            <span class="title-mask"><span class="title-char" data-char="H">H</span></span>
+            <span class="title-mask"><span class="title-char" data-char="T">T</span></span>
+        </h1>
+
+        <!-- Accent Line Through Title -->
+        <div class="title-accent" id="titleAccent"></div>
+
+        <!-- Tagline -->
+        <p class="tagline" id="tagline">
+            <span class="tagline-mask"><span class="tagline-inner">Six films that let us</span></span>
+            <span class="tagline-mask"><span class="tagline-inner">feel what it means to fly.</span></span>
+        </p>
+
+        <!-- Film Index -->
+        <div class="film-index" id="filmIndex">
+            <div class="film-entry">
+                <span class="film-num">01</span>
+                <span class="film-name">Top Gun: Maverick</span>
             </div>
-
-            <h1 class="hero-title" id="heroTitle">
-                <span class="title-letter" data-letter="F">F</span>
-                <span class="title-letter" data-letter="L">L</span>
-                <span class="title-letter" data-letter="Y">Y</span>
-                <span class="title-letter" data-letter="G">G</span>
-                <span class="title-letter" data-letter="H">H</span>
-                <span class="title-letter" data-letter="T">T</span>
-            </h1>
-
-            <p class="hero-tagline" id="heroTagline">
-                Six films that made us feel what it means to fly.
-            </p>
-
-            <div class="hero-films" id="heroFilms">
-                <span class="hero-film">Top Gun: Maverick</span>
-                <span class="hero-film-dot">·</span>
-                <span class="hero-film">Interstellar</span>
-                <span class="hero-film-dot">·</span>
-                <span class="hero-film">The Aviator</span>
-                <span class="hero-film-dot">·</span>
-                <span class="hero-film">Dunkirk</span>
-                <span class="hero-film-dot">·</span>
-                <span class="hero-film">Gravity</span>
-                <span class="hero-film-dot">·</span>
-                <span class="hero-film">How to Train Your Dragon</span>
+            <div class="film-entry">
+                <span class="film-num">02</span>
+                <span class="film-name">Interstellar</span>
             </div>
-
-            <div class="hero-cta" id="heroCta">
-                <button class="cta-btn" id="ctaBtn">
-                    <span class="cta-text">Begin the Journey</span>
-                    <span class="cta-arrow">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <polyline points="19 12 12 19 5 12"></polyline>
-                        </svg>
-                    </span>
-                </button>
+            <div class="film-entry">
+                <span class="film-num">03</span>
+                <span class="film-name">The Aviator</span>
             </div>
-
+            <div class="film-entry">
+                <span class="film-num">04</span>
+                <span class="film-name">Dunkirk</span>
+            </div>
+            <div class="film-entry">
+                <span class="film-num">05</span>
+                <span class="film-name">Gravity</span>
+            </div>
+            <div class="film-entry">
+                <span class="film-num">06</span>
+                <span class="film-name">How to Train Your Dragon</span>
+            </div>
         </div>
 
-        <!-- Side Markers -->
-        <div class="side-marker side-marker--left">
-            <span>FLYGHT</span>
-            <span class="marker-line"></span>
-            <span>2024</span>
-        </div>
-        <div class="side-marker side-marker--right">
-            <span>001 / 006</span>
-            <span class="marker-line"></span>
-            <span>SCROLL</span>
+        <!-- CTA -->
+        <div class="cta" id="cta">
+            <button class="cta-btn" id="ctaBtn">
+                <span class="cta-label">Begin the Journey</span>
+                <svg class="cta-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                    stroke-width="1.2">
+                    <line x1="10" y1="3" x2="10" y2="17" />
+                    <polyline points="16 11 10 17 4 11" />
+                </svg>
+            </button>
         </div>
 
-        <!-- Bottom Bar -->
-        <div class="hero-bottom" id="heroBottom">
-            <div class="bottom-line"></div>
-        </div>
+        <!-- Corner Markers -->
+        <div class="marker marker--tl"><span>FLYGHT</span></div>
+        <div class="marker marker--tr"><span>2024</span></div>
+        <div class="marker marker--bl"><span>001 — 006</span></div>
+        <div class="marker marker--br"><span>Scroll ↓</span></div>
 
     </section>
 
