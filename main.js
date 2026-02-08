@@ -1,6 +1,5 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Intro & Hero Animations
-   Counter → Line → Split (line gone) → Reveal
+   FLYGHT — Intro + Hero Animations
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -12,15 +11,16 @@ const introTop = document.getElementById('introTop');
 const introBottom = document.getElementById('introBottom');
 const introLine = document.getElementById('introLine');
 const introCounter = document.getElementById('introCounter');
-
 const noise = document.querySelector('.noise');
-const eyebrow = document.getElementById('eyebrow');
-const eyebrowLines = document.querySelectorAll('.eyebrow-line');
+
+const heroSub = document.getElementById('heroSub');
 const titleChars = document.querySelectorAll('.title-char');
-const tagInners = document.querySelectorAll('.tag-inner');
-const filmIndex = document.getElementById('filmIndex');
-const filmEntries = document.querySelectorAll('.film-entry');
-const cta = document.getElementById('cta');
+const heroDivider = document.getElementById('heroDivider');
+const dividerLines = document.querySelectorAll('.divider-line');
+const heroDesc = document.getElementById('heroDesc');
+const manifestRows = document.querySelectorAll('.manifest-row');
+const ctaWrap = document.getElementById('ctaWrap');
+const hudItems = document.querySelectorAll('.hud-item');
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
@@ -30,10 +30,7 @@ const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
 // ── 1. Counter ──────────────────────────────────────────
 
-tl.to(introCounter, {
-    opacity: 1,
-    duration: 0.4,
-})
+tl.to(introCounter, { opacity: 1, duration: 0.4 })
 
     .to(introCounter, {
         innerText: 100,
@@ -46,12 +43,9 @@ tl.to(introCounter, {
         },
     })
 
-    // ── 2. Counter out, Line in ─────────────────────────────
+    // ── 2. Line expands ────────────────────────────────────
 
-    .to(introCounter, {
-        opacity: 0,
-        duration: 0.3,
-    }, '-=0.15')
+    .to(introCounter, { opacity: 0, duration: 0.3 }, '-=0.15')
 
     .set(introLine, { opacity: 1 })
 
@@ -61,144 +55,130 @@ tl.to(introCounter, {
         ease: 'power4.inOut',
     })
 
-    // Line brightens and glows
     .to(introLine, {
         height: '3px',
-        boxShadow: '0 0 30px 6px rgba(224, 223, 216, 0.4), 0 0 80px 15px rgba(224, 223, 216, 0.1)',
+        boxShadow: '0 0 30px 6px rgba(214,212,204,0.4), 0 0 80px 15px rgba(214,212,204,0.1)',
         duration: 0.35,
         ease: 'power2.out',
     })
 
-    // ── 3. Split — Line disappears INSTANTLY, edges glow ────
+    // ── 3. Split — line gone, edges glow ────────────────────
 
-    // Kill the line immediately
     .set(introLine, { opacity: 0 })
 
-    // Give the bar edges their glow (replaces the line visually)
     .set(introTop, {
-        boxShadow: '0 3px 35px 4px rgba(224, 223, 216, 0.25), 0 1px 6px rgba(224, 223, 216, 0.5)',
+        boxShadow: '0 3px 35px 4px rgba(214,212,204,0.25), 0 1px 6px rgba(214,212,204,0.5)',
     })
     .set(introBottom, {
-        boxShadow: '0 -3px 35px 4px rgba(224, 223, 216, 0.25), 0 -1px 6px rgba(224, 223, 216, 0.5)',
+        boxShadow: '0 -3px 35px 4px rgba(214,212,204,0.25), 0 -1px 6px rgba(214,212,204,0.5)',
     })
 
-    // Bars slide away — hero image revealed behind
-    .to(introTop, {
-        yPercent: -100,
-        duration: 1.4,
-        ease: 'power3.inOut',
-    })
+    .to(introTop, { yPercent: -100, duration: 1.4, ease: 'power3.inOut' })
+    .to(introBottom, { yPercent: 100, duration: 1.4, ease: 'power3.inOut' }, '<')
 
-    .to(introBottom, {
-        yPercent: 100,
-        duration: 1.4,
-        ease: 'power3.inOut',
-    }, '<')
-
-    // Fade the glowing edges as bars move away
+    // Fade edge glow
     .to(introTop, {
-        boxShadow: '0 3px 35px 4px rgba(224, 223, 216, 0), 0 1px 6px rgba(224, 223, 216, 0)',
+        boxShadow: '0 3px 35px 4px transparent, 0 1px 6px transparent',
         duration: 0.8,
     }, '<+0.3')
-
     .to(introBottom, {
-        boxShadow: '0 -3px 35px 4px rgba(224, 223, 216, 0), 0 -1px 6px rgba(224, 223, 216, 0)',
+        boxShadow: '0 -3px 35px 4px transparent, 0 -1px 6px transparent',
         duration: 0.8,
     }, '<')
 
-    // ── 4. Overlays ─────────────────────────────────────────
-
-    .to(noise, {
-        opacity: 0.02,
-        duration: 1.2,
-    }, '-=0.8')
-
+    .to(noise, { opacity: 0.02, duration: 1 }, '-=0.8')
     .set(intro, { display: 'none' })
 
-    // ── 5. Hero content ─────────────────────────────────────
+    // ── 4. Hero content ─────────────────────────────────────
 
-    .to(eyebrow, {
+    // Subtitle
+    .to(heroSub, {
         opacity: 1,
+        y: 0,
         duration: 0.7,
-    }, '-=1')
+        ease: 'power3.out',
+    }, '-=0.9')
 
-    .to(eyebrowLines, {
-        width: 40,
-        duration: 0.6,
-        ease: 'power2.out',
-    }, '<+0.1')
-
-    // Title letters slide up
+    // Title letters
     .to(titleChars, {
         y: 0,
-        duration: 0.9,
-        stagger: 0.05,
+        duration: 1,
+        stagger: 0.06,
         ease: 'power4.out',
-    }, '-=0.3')
+    }, '-=0.4')
 
-    // Tagline
-    .to(tagInners, {
-        y: 0,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: 'power4.out',
-    }, '-=0.5')
+    // Divider
+    .to(heroDivider, { opacity: 1, duration: 0.5 }, '-=0.4')
+    .to(dividerLines, { width: 50, duration: 0.6, ease: 'power2.out' }, '<')
 
-    // Film index
-    .to(filmIndex, {
+    // Description
+    .to(heroDesc, {
         opacity: 1,
-        duration: 0.5,
+        y: 0,
+        duration: 0.7,
+        ease: 'power3.out',
     }, '-=0.3')
 
-    .from(filmEntries, {
-        y: 12,
-        opacity: 0,
+    // Manifest rows
+    .to(manifestRows, {
+        opacity: 1,
         duration: 0.4,
-        stagger: 0.03,
+        stagger: 0.04,
+    }, '-=0.3')
+
+    .from(manifestRows, {
+        x: 15,
+        duration: 0.5,
+        stagger: 0.04,
         ease: 'power2.out',
     }, '<')
 
+    // HUD items
+    .to(hudItems, {
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.08,
+    }, '-=0.4')
+
     // CTA
-    .to(cta, {
+    .to(ctaWrap, {
         opacity: 1,
         duration: 0.5,
-    }, '-=0.1')
+    }, '-=0.3')
 
-    .from(cta, {
-        y: 10,
+    .from(ctaWrap, {
+        y: 8,
         duration: 0.5,
         ease: 'power2.out',
     }, '<');
 
-// ── Title Letter Hover ──────────────────────────────────
+// ── Title Hover ─────────────────────────────────────────
 
 titleChars.forEach((c, i) => {
     c.addEventListener('mouseenter', () => {
-        gsap.to(c, { y: -7, duration: 0.3, ease: 'power3.out' });
-        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: -3, duration: 0.3, ease: 'power3.out' });
-        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: -3, duration: 0.3, ease: 'power3.out' });
+        gsap.to(c, { y: -6, duration: 0.3, ease: 'power3.out' });
+        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: -2, duration: 0.3, ease: 'power3.out' });
+        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: -2, duration: 0.3, ease: 'power3.out' });
     });
-
     c.addEventListener('mouseleave', () => {
-        gsap.to(c, { y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+        gsap.to(c, { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
+        if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
+        if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' });
     });
 });
 
-// ── Subtle parallax on hero background ──────────────────
+// ── Background Parallax ─────────────────────────────────
 
-const heroBg = document.querySelector('.hero-bg-img');
+const bgImg = document.querySelector('.hero-bg-img');
 
-if (heroBg && window.matchMedia('(hover: hover)').matches) {
+if (bgImg && window.matchMedia('(hover: hover)').matches) {
     document.addEventListener('mousemove', (e) => {
         const nx = (e.clientX / window.innerWidth - 0.5) * 2;
         const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-
-        gsap.to(heroBg, {
-            x: nx * -8,
-            y: ny * -8,
-            duration: 2,
+        gsap.to(bgImg, {
+            x: nx * -10,
+            y: ny * -10,
+            duration: 2.5,
             ease: 'power2.out',
             overwrite: 'auto',
         });
