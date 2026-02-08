@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════
    FLYGHT — Intro & Hero Animations
-   No cursor. Clean cinematic intro. Content behind bars.
+   Counter → Line → Split (line gone) → Reveal
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
@@ -14,12 +14,9 @@ const introLine = document.getElementById('introLine');
 const introCounter = document.getElementById('introCounter');
 
 const noise = document.querySelector('.noise');
-const vignette = document.querySelector('.vignette');
-
 const eyebrow = document.getElementById('eyebrow');
 const eyebrowLines = document.querySelectorAll('.eyebrow-line');
 const titleChars = document.querySelectorAll('.title-char');
-const titleSweep = document.getElementById('titleSweep');
 const tagInners = document.querySelectorAll('.tag-inner');
 const filmIndex = document.getElementById('filmIndex');
 const filmEntries = document.querySelectorAll('.film-entry');
@@ -27,12 +24,11 @@ const cta = document.getElementById('cta');
 
 // ════════════════════════════════════════════════════════
 //   MASTER TIMELINE
-//   Counter → Line Expands → Bars Split (glow edges) → Reveal
 // ════════════════════════════════════════════════════════
 
 const tl = gsap.timeline({ defaults: { ease: 'power3.inOut' } });
 
-// ── 1. Counter fades in and counts 00 → 100 ────────────
+// ── 1. Counter ──────────────────────────────────────────
 
 tl.to(introCounter, {
     opacity: 1,
@@ -50,7 +46,7 @@ tl.to(introCounter, {
         },
     })
 
-    // ── 2. Counter fades, Line appears and expands ──────────
+    // ── 2. Counter out, Line in ─────────────────────────────
 
     .to(introCounter, {
         opacity: 0,
@@ -65,28 +61,28 @@ tl.to(introCounter, {
         ease: 'power4.inOut',
     })
 
-    // Line brightens
+    // Line brightens and glows
     .to(introLine, {
         height: '3px',
-        boxShadow: '0 0 30px 6px rgba(210, 210, 225, 0.4), 0 0 80px 15px rgba(210, 210, 225, 0.1)',
-        duration: 0.4,
+        boxShadow: '0 0 30px 6px rgba(224, 223, 216, 0.4), 0 0 80px 15px rgba(224, 223, 216, 0.1)',
+        duration: 0.35,
         ease: 'power2.out',
     })
 
-    // ── 3. Bars split open — edges GLOW ─────────────────────
+    // ── 3. Split — Line disappears INSTANTLY, edges glow ────
 
-    // Add glowing edges to the bars BEFORE they move
-    .to(introTop, {
-        boxShadow: '0 3px 40px 5px rgba(210, 210, 225, 0.25), 0 1px 8px rgba(210, 210, 225, 0.5)',
-        duration: 0.3,
-    }, '-=0.1')
+    // Kill the line immediately
+    .set(introLine, { opacity: 0 })
 
-    .to(introBottom, {
-        boxShadow: '0 -3px 40px 5px rgba(210, 210, 225, 0.25), 0 -1px 8px rgba(210, 210, 225, 0.5)',
-        duration: 0.3,
-    }, '<')
+    // Give the bar edges their glow (replaces the line visually)
+    .set(introTop, {
+        boxShadow: '0 3px 35px 4px rgba(224, 223, 216, 0.25), 0 1px 6px rgba(224, 223, 216, 0.5)',
+    })
+    .set(introBottom, {
+        boxShadow: '0 -3px 35px 4px rgba(224, 223, 216, 0.25), 0 -1px 6px rgba(224, 223, 216, 0.5)',
+    })
 
-    // Bars slide away — revealing the hero behind them
+    // Bars slide away — hero image revealed behind
     .to(introTop, {
         yPercent: -100,
         duration: 1.4,
@@ -99,77 +95,66 @@ tl.to(introCounter, {
         ease: 'power3.inOut',
     }, '<')
 
-    // Line fades during the split
-    .to(introLine, {
-        opacity: 0,
-        duration: 0.6,
-    }, '<+0.2')
+    // Fade the glowing edges as bars move away
+    .to(introTop, {
+        boxShadow: '0 3px 35px 4px rgba(224, 223, 216, 0), 0 1px 6px rgba(224, 223, 216, 0)',
+        duration: 0.8,
+    }, '<+0.3')
 
-    // ── 4. Overlays fade in ─────────────────────────────────
+    .to(introBottom, {
+        boxShadow: '0 -3px 35px 4px rgba(224, 223, 216, 0), 0 -1px 6px rgba(224, 223, 216, 0)',
+        duration: 0.8,
+    }, '<')
 
-    .to(vignette, {
-        opacity: 1,
-        duration: 1.2,
-    }, '-=0.8')
+    // ── 4. Overlays ─────────────────────────────────────────
 
     .to(noise, {
         opacity: 0.02,
         duration: 1.2,
-    }, '<')
+    }, '-=0.8')
 
-    // Remove the intro from DOM after it's gone
     .set(intro, { display: 'none' })
 
-    // ── 5. Hero content reveals ─────────────────────────────
+    // ── 5. Hero content ─────────────────────────────────────
 
-    // Eyebrow
     .to(eyebrow, {
         opacity: 1,
         duration: 0.7,
-    }, '-=0.8')
+    }, '-=1')
 
     .to(eyebrowLines, {
-        width: 45,
+        width: 40,
         duration: 0.6,
         ease: 'power2.out',
     }, '<+0.1')
 
-    // Title letters — slide up from mask
+    // Title letters slide up
     .to(titleChars, {
         y: 0,
         duration: 0.9,
-        stagger: 0.055,
+        stagger: 0.05,
         ease: 'power4.out',
     }, '-=0.3')
 
-    // Sweep light across title
-    .set(titleSweep, { opacity: 1 })
-    .to(titleSweep, {
-        left: '110%',
-        duration: 1.2,
-        ease: 'power2.inOut',
-    })
-    .set(titleSweep, { opacity: 0 })
-
-    // Tagline lines
+    // Tagline
     .to(tagInners, {
         y: 0,
         duration: 0.8,
         stagger: 0.08,
         ease: 'power4.out',
-    }, '-=1')
+    }, '-=0.5')
 
     // Film index
     .to(filmIndex, {
         opacity: 1,
         duration: 0.5,
-    }, '-=0.4')
+    }, '-=0.3')
 
     .from(filmEntries, {
         y: 12,
         opacity: 0,
-        duration: 0.45,
-        stagger: 0.035,
+        duration: 0.4,
+        stagger: 0.03,
         ease: 'power2.out',
     }, '<')
 
@@ -189,8 +174,7 @@ tl.to(introCounter, {
 
 titleChars.forEach((c, i) => {
     c.addEventListener('mouseenter', () => {
-        gsap.to(c, { y: -8, duration: 0.3, ease: 'power3.out' });
-        // Neighbors lift slightly
+        gsap.to(c, { y: -7, duration: 0.3, ease: 'power3.out' });
         if (titleChars[i - 1]) gsap.to(titleChars[i - 1], { y: -3, duration: 0.3, ease: 'power3.out' });
         if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: -3, duration: 0.3, ease: 'power3.out' });
     });
@@ -201,3 +185,22 @@ titleChars.forEach((c, i) => {
         if (titleChars[i + 1]) gsap.to(titleChars[i + 1], { y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
     });
 });
+
+// ── Subtle parallax on hero background ──────────────────
+
+const heroBg = document.querySelector('.hero-bg-img');
+
+if (heroBg && window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+
+        gsap.to(heroBg, {
+            x: nx * -8,
+            y: ny * -8,
+            duration: 2,
+            ease: 'power2.out',
+            overwrite: 'auto',
+        });
+    });
+}

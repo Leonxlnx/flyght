@@ -1,9 +1,6 @@
 /* ════════════════════════════════════════════════════════
-   FLYGHT — Cinematic Hero
-   Monochrome + subtle warmth. No gold. No green. No violet.
+   FLYGHT — Clean Cinematic Hero with Background Image
    ════════════════════════════════════════════════════════ */
-
-/* ── Reset ────────────────────────────────────────────── */
 
 *,
 *::before,
@@ -15,13 +12,11 @@
 
 :root {
     --bg: #09090d;
-    --text: #b8b8c0;
-    --text-bright: #e8e8f0;
-    --text-dim: rgba(184, 184, 192, 0.22);
-    --text-ghost: rgba(184, 184, 192, 0.06);
-    --glow: rgba(210, 210, 225, 0.6);
-    --glow-soft: rgba(210, 210, 225, 0.08);
-    --line-color: rgba(184, 184, 192, 0.08);
+    --text: #e0dfd8;
+    --text-bright: #f5f4f0;
+    --text-dim: rgba(224, 223, 216, 0.35);
+    --text-ghost: rgba(224, 223, 216, 0.1);
+    --glow: rgba(224, 223, 216, 0.6);
 
     --f-display: 'Syne', sans-serif;
     --f-body: 'Space Grotesk', sans-serif;
@@ -45,8 +40,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════
-   INTRO OVERLAY
-   Sits ON TOP of the hero. Hero is behind it.
+   INTRO
    ════════════════════════════════════════════════════════ */
 
 .intro {
@@ -66,15 +60,11 @@ body {
 .intro-top {
     top: 0;
     height: 50%;
-    /* Glowing bottom edge — activated by GSAP */
-    box-shadow: none;
 }
 
 .intro-bottom {
     bottom: 0;
     height: 50%;
-    /* Glowing top edge — activated by GSAP */
-    box-shadow: none;
 }
 
 .intro-line {
@@ -86,9 +76,9 @@ body {
     height: 2px;
     background: linear-gradient(90deg,
             transparent 0%,
-            var(--glow-soft) 15%,
+            rgba(224, 223, 216, 0.15) 15%,
             var(--glow) 50%,
-            var(--glow-soft) 85%,
+            rgba(224, 223, 216, 0.15) 85%,
             transparent 100%);
     z-index: 10;
     opacity: 0;
@@ -108,7 +98,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════
-   NOISE + VIGNETTE
+   NOISE
    ════════════════════════════════════════════════════════ */
 
 .noise {
@@ -155,20 +145,8 @@ body {
     }
 }
 
-.vignette {
-    position: fixed;
-    inset: 0;
-    z-index: 4;
-    pointer-events: none;
-    background: radial-gradient(ellipse 70% 70% at center,
-            transparent 20%,
-            rgba(9, 9, 13, 0.75) 100%);
-    opacity: 0;
-}
-
 /* ════════════════════════════════════════════════════════
    HERO
-   Always rendered — revealed by intro bars opening
    ════════════════════════════════════════════════════════ */
 
 .hero {
@@ -177,23 +155,55 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 5;
-    padding: 2rem;
     overflow: hidden;
 }
 
-/* Background glow — subtle, non-colored, adds depth */
-.hero-glow {
+/* ── Background Image ─────────────────────────────────── */
+
+.hero-bg {
     position: absolute;
     inset: 0;
     z-index: 0;
+}
+
+.hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+    filter: brightness(0.5) saturate(0.7);
+}
+
+.hero-bg-overlay {
+    position: absolute;
+    inset: 0;
     background:
-        radial-gradient(ellipse 60% 50% at 35% 40%, rgba(255, 255, 255, 0.015) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 60% at 70% 65%, rgba(255, 255, 255, 0.01) 0%, transparent 70%);
-    pointer-events: none;
+        /* Center: clearer for text to show through */
+        radial-gradient(ellipse 60% 50% at center,
+            rgba(9, 9, 13, 0.35) 0%,
+            rgba(9, 9, 13, 0.7) 70%,
+            rgba(9, 9, 13, 0.92) 100%),
+        /* Extra darkness at bottom */
+        linear-gradient(to bottom,
+            transparent 50%,
+            rgba(9, 9, 13, 0.6) 100%);
+}
+
+/* ── Content ──────────────────────────────────────────── */
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    max-width: 900px;
 }
 
 /* ── Eyebrow ──────────────────────────────────────────── */
@@ -204,13 +214,11 @@ body {
     gap: 1rem;
     margin-bottom: clamp(1.2rem, 3vh, 2.5rem);
     opacity: 0;
-    position: relative;
-    z-index: 1;
 }
 
 .eyebrow-text {
     font-family: var(--f-mono);
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.48rem, 0.7vw, 0.62rem);
     letter-spacing: 0.35em;
     text-transform: uppercase;
     color: var(--text-dim);
@@ -220,22 +228,21 @@ body {
 .eyebrow-line {
     width: 0;
     height: 1px;
-    background: var(--line-color);
+    background: rgba(224, 223, 216, 0.12);
 }
 
 /* ── Title ────────────────────────────────────────────── */
 
 .title {
     font-family: var(--f-display);
-    font-size: clamp(2.8rem, 11vw, 11rem);
+    font-size: clamp(2.8rem, 11vw, 10rem);
     font-weight: 800;
-    letter-spacing: clamp(0.15em, 3vw, 0.45em);
+    letter-spacing: clamp(0.12em, 2.5vw, 0.4em);
     line-height: 1;
     display: flex;
     justify-content: center;
-    position: relative;
-    z-index: 1;
-    margin-bottom: clamp(0.8rem, 2vh, 1.5rem);
+    margin-bottom: clamp(1rem, 2.5vh, 2rem);
+    text-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
 }
 
 .title-wrap {
@@ -245,32 +252,15 @@ body {
 
 .title-char {
     display: inline-block;
-    transform: translateY(110%);
+    transform: translateY(115%);
     color: var(--text-bright);
     will-change: transform;
-    transition: color 0.4s ease;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .title-char:hover {
     color: #fff;
-}
-
-/* Sweep light — moves across title after reveal */
-.title-sweep {
-    position: absolute;
-    top: 0;
-    left: -20%;
-    width: 15%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.06),
-            rgba(255, 255, 255, 0.12),
-            rgba(255, 255, 255, 0.06),
-            transparent);
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
 }
 
 /* ── Tagline ──────────────────────────────────────────── */
@@ -278,8 +268,6 @@ body {
 .tagline {
     text-align: center;
     margin-bottom: clamp(1.5rem, 4vh, 3rem);
-    position: relative;
-    z-index: 1;
 }
 
 .tag-wrap {
@@ -289,10 +277,10 @@ body {
 
 .tag-inner {
     display: block;
-    transform: translateY(110%);
+    transform: translateY(115%);
     font-family: var(--f-serif);
     font-style: italic;
-    font-size: clamp(0.9rem, 1.6vw, 1.3rem);
+    font-size: clamp(0.9rem, 1.5vw, 1.25rem);
     color: var(--text-dim);
     line-height: 1.8;
 }
@@ -307,8 +295,6 @@ body {
     max-width: 680px;
     margin-bottom: clamp(1.5rem, 4vh, 3rem);
     opacity: 0;
-    position: relative;
-    z-index: 1;
 }
 
 .film-entry {
@@ -317,6 +303,7 @@ body {
     gap: 0.45rem;
     padding: 0.35rem 0;
     position: relative;
+    cursor: pointer;
 }
 
 .film-entry::after {
@@ -361,8 +348,6 @@ body {
 
 .cta {
     opacity: 0;
-    position: relative;
-    z-index: 1;
 }
 
 .cta-btn {
@@ -370,8 +355,8 @@ body {
     align-items: center;
     gap: 0.7rem;
     padding: 0.85rem 1.8rem;
-    background: transparent;
-    border: 1px solid var(--line-color);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-dim);
     font-family: var(--f-mono);
     font-size: 0.55rem;
@@ -380,26 +365,15 @@ body {
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    transition: color 0.4s ease, border-color 0.4s ease;
-}
-
-.cta-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.03);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cta-btn:hover::before {
-    transform: scaleX(1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
 }
 
 .cta-btn:hover {
     color: var(--text-bright);
-    border-color: rgba(184, 184, 192, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .cta-label,
@@ -429,7 +403,7 @@ body {
    ════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
-    .hero {
+    .hero-content {
         padding: 1.5rem;
     }
 
@@ -439,6 +413,10 @@ body {
 
     .eyebrow {
         gap: 0.6rem;
+    }
+
+    .hero-bg-img {
+        object-position: center center;
     }
 }
 
