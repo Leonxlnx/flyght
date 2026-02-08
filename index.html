@@ -19,7 +19,7 @@
 
 <body>
 
-    <!-- ═══════ INTRO (no counter) ═══════ -->
+    <!-- ═══════ INTRO ═══════ -->
     <div class="intro" id="intro">
         <div class="intro-bar intro-top" id="introTop"></div>
         <div class="intro-bar intro-bottom" id="introBottom"></div>
@@ -110,69 +110,131 @@
 
     </section>
 
-    <!-- ═══════ TAKEOFF OVERLAY ═══════ -->
+    <!-- ═══════ TAKEOFF → SCROLLABLE FILM PAGE ═══════ -->
     <div class="takeoff-overlay" id="takeoffOverlay">
 
-        <!-- Background image -->
-        <div class="to-bg">
-            <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=1920&q=80&auto=format" alt=""
-                class="to-bg-img" />
-            <div class="to-bg-fade"></div>
-        </div>
-
-        <div class="takeoff-card" id="takeoffCard">
-
-            <!-- Top: Number + Label -->
-            <div class="to-header">
-                <span class="to-num">01</span>
-                <span class="to-label">Flight Log</span>
+        <!-- ── FOLD 1: Hero Card (100vh) ── -->
+        <section class="to-hero" id="toHero">
+            <div class="to-bg">
+                <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=1920&q=80&auto=format" alt=""
+                    class="to-bg-img" />
+                <div class="to-bg-fade"></div>
             </div>
 
-            <!-- Center: Title -->
-            <div class="to-title-block">
-                <h2 class="to-title">Top Gun:</h2>
-                <h2 class="to-title to-title-accent">Maverick</h2>
-            </div>
-
-            <!-- Meta line -->
-            <div class="to-meta">
-                <span>2022</span>
-                <span class="to-dot">·</span>
-                <span>Joseph Kosinski</span>
-                <span class="to-dot">·</span>
-                <span>131 min</span>
-                <span class="to-dot">·</span>
-                <span>Action / Drama</span>
-            </div>
-
-            <!-- Quote -->
-            <div class="to-quote">
-                <span class="to-qmark">"</span>
-                It's not the plane, it's the pilot.
-                <span class="to-qmark">"</span>
-            </div>
-
-            <!-- Facts strip -->
-            <div class="to-facts">
-                <div class="to-fact">
-                    <span class="to-fact-val">7.5G</span>
-                    <span class="to-fact-label">Peak G-Force</span>
+            <div class="takeoff-card" id="takeoffCard">
+                <div class="to-header">
+                    <span class="to-num">01</span>
+                    <span class="to-label">Flight Log</span>
                 </div>
-                <div class="to-fact-divider"></div>
-                <div class="to-fact">
-                    <span class="to-fact-val">F/A-18</span>
-                    <span class="to-fact-label">Real Super Hornets</span>
+                <div class="to-title-block">
+                    <h2 class="to-title">Top Gun:</h2>
+                    <h2 class="to-title to-title-accent">Maverick</h2>
                 </div>
-                <div class="to-fact-divider"></div>
-                <div class="to-fact">
-                    <span class="to-fact-val">3 MO</span>
-                    <span class="to-fact-label">Flight Training</span>
+                <div class="to-meta">
+                    <span>2022</span><span class="to-dot">·</span>
+                    <span>Joseph Kosinski</span><span class="to-dot">·</span>
+                    <span>131 min</span><span class="to-dot">·</span>
+                    <span>Action / Drama</span>
+                </div>
+                <div class="to-quote">
+                    <span class="to-qmark">"</span>
+                    It's not the plane, it's the pilot.
+                    <span class="to-qmark">"</span>
+                </div>
+                <div class="to-facts">
+                    <div class="to-fact">
+                        <span class="to-fact-val">7.5G</span>
+                        <span class="to-fact-label">Peak G-Force</span>
+                    </div>
+                    <div class="to-fact-divider"></div>
+                    <div class="to-fact">
+                        <span class="to-fact-val">F/A-18</span>
+                        <span class="to-fact-label">Real Super Hornets</span>
+                    </div>
+                    <div class="to-fact-divider"></div>
+                    <div class="to-fact">
+                        <span class="to-fact-val">3 MO</span>
+                        <span class="to-fact-label">Flight Training</span>
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <div class="to-scroll-hint" id="toScrollHint">
+                <span>Scroll</span>
+                <div class="to-scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- ── FOLD 2: Synopsis ── -->
+        <section class="to-section to-synopsis" id="toSynopsis">
+            <div class="to-section-inner">
+                <span class="to-section-label">The Mission</span>
+                <p class="to-synopsis-text">
+                    After thirty years of service, Pete "Maverick" Mitchell is where he belongs — pushing the envelope
+                    as a courageous test pilot. When he's called to train a detachment of Top Gun graduates for a
+                    specialized mission no living pilot has ever seen, Maverick encounters Lt. Bradley Bradshaw, the son
+                    of his late friend "Goose."
+                </p>
+                <p class="to-synopsis-text to-synopsis-sub">
+                    Facing an uncertain future and ghosts of the past, Maverick must confront his deepest fears —
+                    culminating in a mission that demands the ultimate sacrifice from those chosen to fly it.
+                </p>
+            </div>
+        </section>
+
+        <!-- ── FOLD 3: Gallery ── -->
+        <section class="to-gallery" id="toGallery">
+            <div class="to-gallery-label">
+                <span class="to-section-label">Behind the Cockpit</span>
+            </div>
+
+            <div class="to-grid">
+                <div class="to-grid-item to-grid-wide gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1596781351605-1e081ab3ada0?w=1200&q=80&auto=format"
+                        alt="Fighter jet cockpit view" loading="lazy" />
+                    <div class="to-grid-caption">Inside the cockpit — real flight footage, no CGI</div>
+                </div>
+                <div class="to-grid-item to-grid-tall gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80&auto=format"
+                        alt="Fighter jet in flight" loading="lazy" />
+                    <div class="to-grid-caption">F/A-18E Super Hornet at full afterburner</div>
+                </div>
+                <div class="to-grid-item gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80&auto=format"
+                        alt="Sunset gradient" loading="lazy" />
+                    <div class="to-grid-caption">Golden hour on the flight line</div>
+                </div>
+                <div class="to-grid-item to-grid-wide gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1608236465209-5fabc5c89d75?w=1200&q=80&auto=format"
+                        alt="Aircraft carrier deck" loading="lazy" />
+                    <div class="to-grid-caption">Aircraft carrier operations — the floating airfield</div>
+                </div>
+                <div class="to-grid-item to-grid-tall gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=800&q=80&auto=format"
+                        alt="Jet with vapor trails" loading="lazy" />
+                    <div class="to-grid-caption">Breaking the sound barrier — vapor cones form</div>
+                </div>
+                <div class="to-grid-item gal-reveal">
+                    <img src="https://images.unsplash.com/photo-1569605803663-e9337d901ff9?w=800&q=80&auto=format"
+                        alt="Navy pilot gear" loading="lazy" />
+                    <div class="to-grid-caption">The pilot's helmet — precision-fitted for each aviator</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FOLD 4: Closing Credits ── -->
+        <section class="to-section to-closing" id="toClosing">
+            <div class="to-section-inner">
+                <div class="to-closing-line"></div>
+                <span class="to-closing-text">
+                    Tom Cruise · Miles Teller · Jennifer Connelly · Jon Hamm · Glen Powell · Ed Harris · Val Kilmer
+                </span>
+                <div class="to-closing-line"></div>
+                <span class="to-closing-studio">Paramount Pictures · Skydance Media</span>
+            </div>
+        </section>
+
     </div>
-
 
     <!-- Flying plane — SVG vector, stays sharp at any scale -->
     <div class="flying-plane" id="flyingPlane" aria-hidden="true">

@@ -7,6 +7,9 @@
    ════════════════════════════════════════════════════════ */
 
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ── Elements ────────────────────────────────────────────
 
@@ -201,11 +204,77 @@ function initTakeoff() {
             }, '-=0.3')
             .fromTo('.to-bg-img', { opacity: 0, scale: 1.15 }, {
                 opacity: 0.12, scale: 1.05, duration: 2, ease: 'power2.out',
-            }, '-=1.5');
+            }, '-=1.5')
+            // Scroll hint
+            .fromTo('#toScrollHint', { opacity: 0 }, {
+                opacity: 1, duration: 0.6, ease: 'power2.out',
+                onComplete: initFilmScroll,
+            }, '-=0.8');
     });
 }
 
 initTakeoff();
+
+// ════════════════════════════════════════════════════════
+//   FILM PAGE SCROLL ANIMATIONS
+// ════════════════════════════════════════════════════════
+
+function initFilmScroll() {
+    const scroller = document.getElementById('takeoffOverlay');
+
+    // Synopsis
+    gsap.utils.toArray('#toSynopsis .to-section-label, #toSynopsis .to-synopsis-text').forEach(el => {
+        gsap.to(el, {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: {
+                trigger: el,
+                scroller,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+            },
+        });
+    });
+
+    // Gallery label
+    gsap.to('#toGallery .to-section-label', {
+        opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: {
+            trigger: '#toGallery .to-gallery-label',
+            scroller,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+        },
+    });
+
+    // Gallery items
+    gsap.utils.toArray('.gal-reveal').forEach((item, i) => {
+        gsap.to(item, {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+            delay: i * 0.1,
+            scrollTrigger: {
+                trigger: item,
+                scroller,
+                start: 'top 90%',
+                toggleActions: 'play none none none',
+            },
+        });
+    });
+
+    // Closing
+    gsap.utils.toArray('#toClosing .to-closing-text, #toClosing .to-closing-studio').forEach(el => {
+        gsap.to(el, {
+            opacity: 1, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: {
+                trigger: el,
+                scroller,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+            },
+        });
+    });
+
+    ScrollTrigger.refresh();
+}
 
 // ════════════════════════════════════════════════════════
 //   INTRO (no counter)
