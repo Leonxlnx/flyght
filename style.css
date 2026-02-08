@@ -389,12 +389,19 @@ body {
 .flying-plane {
     position: fixed;
     z-index: 300;
-    font-size: 1.5rem;
+    width: 28px;
+    height: 28px;
+    color: var(--text-bright);
     pointer-events: none;
     opacity: 0;
-    will-change: transform, font-size;
+    will-change: transform;
     transform-origin: center center;
-    perspective: 1000px;
+}
+
+.flying-plane svg {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 /* ════════════════════════════════════════════════════════

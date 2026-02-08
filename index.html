@@ -63,7 +63,12 @@
             <div class="cta-wrap" id="ctaWrap">
                 <button class="cta-btn" id="ctaBtn">
                     <span class="cta-text">Take off</span>
-                    <span class="cta-icon" id="ctaIcon">✈</span>
+                    <span class="cta-icon" id="ctaIcon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path
+                                d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                        </svg>
+                    </span>
                 </button>
             </div>
 
@@ -115,8 +120,13 @@
         </div>
     </div>
 
-    <!-- Flying plane (lives outside everything so it can go anywhere) -->
-    <div class="flying-plane" id="flyingPlane" aria-hidden="true">✈</div>
+    <!-- Flying plane — SVG vector, stays sharp at any scale -->
+    <div class="flying-plane" id="flyingPlane" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+        </svg>
+    </div>
 
     <script type="module" src="/main.js"></script>
 </body>
